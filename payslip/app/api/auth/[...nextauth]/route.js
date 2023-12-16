@@ -12,14 +12,15 @@ const handler = NextAuth({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
       credentials: {
-        email: {},
+        username: {},
         password: {},
       },
-      async authorize(credentials, req) {
-        const res = await fetch("http://localhost:4030/users/login", {
+      async authorize(credentials, req)
+      {
+        const res = await fetch(`${process.env.API_URL}/api/authentication/login`, {
           method: "POST",
           body: JSON.stringify({
-            email: credentials?.email,
+            username: credentials?.username,
             password: credentials?.password,
           }),
           headers: { "Content-Type": "application/json" },
@@ -27,20 +28,25 @@ const handler = NextAuth({
 
         const data = await res.json();
 
-        // If no error and we have user data, return it
-        if (res.ok && data) {
+        console.log(data)
+
+        if (res.ok && data)
+        {
           return data;
         }
-        // Return null if user data could not be retrieved
+
+
         return null;
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user, session }) {
+    async jwt({ token, user, session })
+    {
       return { ...token, ...user };
     },
-    async session({ session, token, user }) {
+    async session({ session, token, user })
+    {
       session.user = token;
       return session;
     },

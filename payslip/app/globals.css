@@ -16,6 +16,10 @@
   }
 }
 
+.gradient-bg{
+  @apply bg-gradient-to-b from-gray-800 via-cyan-900 to-cyan-950
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -34,4 +38,8 @@ body {
 @font-face {
   font-family: IranSansBold;
   src: url(../public/fonts/Iransans-Bold.ttf);
+}
+
+.dir-right {
+  direction: rtl;
 }

@@ -1,14 +1,13 @@
 ﻿using FakeItEasy;
 using Payslip.API.Controllers;
 using Xunit;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using Payslip.Application.Services;
 using Payslip.Application.Commands;
 using FluentValidation;
 
-namespace Payslip_Api.Authentications.Actions
+namespace Payslip_Api.Sections.Authentications.Actions
 {
     public class AuthenticationControllerTest
     {
@@ -24,8 +23,8 @@ namespace Payslip_Api.Authentications.Actions
 
 
         [Theory]
-        [InlineData("199677", "113")]
-        public async void Should_return_error_when_username_is_wrong(string nationalCode, string personnelCode)
+        [InlineData("1990919677", "113")]
+        public async void Should_return_ok_when_credential_is_correct(string nationalCode, string personnelCode)
         {
             // Arrange
             var loginCommand = new LoginCommand(nationalCode, personnelCode);
@@ -34,11 +33,9 @@ namespace Payslip_Api.Authentications.Actions
             var response = await _authenticationController.Login(loginCommand);
             var result = (ObjectResult)response;
 
-
-
             // Assert
-            result.StatusCode.Should().Be(200);
             response.Should().BeOfType<OkObjectResult>();
+            result.StatusCode.Should().Be(200);
         }
 
         [Theory]
@@ -76,5 +73,7 @@ namespace Payslip_Api.Authentications.Actions
             await _authenticationController.Invoking(x => x.Login(loginCommand))
                 .Should().ThrowAsync<ValidationException>().WithMessage("نام کاربری الزامی است.\nرمز عبور الزامی است.");
         }
+
+
     }
 }
