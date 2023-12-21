@@ -4,6 +4,7 @@
     {
         IUserRepository UserRepository { get; }
         IRoleRepository RoleRepository { get; }
+        IPayslipRepository PayslipRepository { get; }
         Task<int> CommitAsync();
 
     }

@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Payslip.Application.Helpers
+namespace Payslip.Application.Helpers.TokenHelpers
 {
     public class JwtFactory : IJwtFactory
     {

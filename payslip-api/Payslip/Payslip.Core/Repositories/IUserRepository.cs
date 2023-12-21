@@ -5,5 +5,6 @@ namespace Payslip.Core.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
+        User? GetUserByCardNumber(string cardNumber);
     }
 }

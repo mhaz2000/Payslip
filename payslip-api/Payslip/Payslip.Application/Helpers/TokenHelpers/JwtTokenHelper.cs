@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace Payslip.Application.Helpers
+namespace Payslip.Application.Helpers.TokenHelpers
 {
     public class JwtTokenHelper : IJwtTokenHelper
     {

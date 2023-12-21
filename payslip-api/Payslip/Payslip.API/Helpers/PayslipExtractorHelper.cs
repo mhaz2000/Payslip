@@ -16,32 +16,37 @@ namespace Payslip.API.Helpers
                 worksheet.TrimLastEmptyRows();
                 var rowCount = worksheet.Dimension.Rows;
 
-                int counter = 2;
-                while (counter <= rowCount)
+                int? counter = FindNextRow(worksheet, 1, rowCount);
+                while (counter is not null)
                 {
-                    var payslipCommand = GeneratePayslip(worksheet, counter);
-                    counter += 23;
-
+                    var payslipCommand = GeneratePayslip(worksheet, counter.Value);
                     yield return payslipCommand;
+
+                    counter = FindNextRow(worksheet, counter.Value + 1, rowCount);
                 }
             }
         }
 
+        private int? FindNextRow(ExcelWorksheet worksheet, int index, int rowCount)
+        {
+            while (index <= rowCount)
+            {
+                if (worksheet.Cells[index, 1].Value?.ToString()?.Contains("رديـف :") ?? false)
+                    return index;
+
+                index++;
+            }
+
+            return null;
+        }
+
         private PayslipCommand GeneratePayslip(ExcelWorksheet worksheet, int index)
         {
-            var number = worksheet.Cells[index, 1].Value?.ToString()!.Replace("رديـف :", "");
-            var date = worksheet.Cells[index, 8].Value?.ToString()!.Replace("تاريـخ : ", "");
-            var detailAccountCode = worksheet.Cells[index + 2, 1].Value?.ToString()!.Replace("كـد تفصيلـي : ", "");
             var lastName = worksheet.Cells[index + 2, 3].Value?.ToString()!.Replace("نـام خانوادگـي : ", "");
             var firstName = worksheet.Cells[index + 2, 6].Value?.ToString()!.Replace("نـام : ", "");
             var cardNumber = worksheet.Cells[index + 3, 1].Value?.ToString()!.Replace("شـماره كارت : ", "");
-            var personellCode = worksheet.Cells[index + 3, 3].Value?.ToString()!.Replace("شـماره پرسنلي :", "");
-            var accountNumber = worksheet.Cells[index + 3, 5].Value?.ToString()!.Replace("شـماره حساب : ", "");
-            var bank = worksheet.Cells[index + 3, 6].Value?.ToString()!.Replace("بـانك : ", "");
-            var dailySalary = worksheet.Cells[index + 3, 7].Value?.ToString()!.Replace("دستمزد روزانه : ", "");
             var contractType = worksheet.Cells[index + 4, 1].Value?.ToString()!.Replace("نـوع استخـدام : ", "");
             var location = worksheet.Cells[index + 4, 6].Value?.ToString()!;
-            var costCenter = worksheet.Cells[index + 5, 1].Value?.ToString()!.Replace("مـركـز هزينـه : ", "");
             var position = worksheet.Cells[index + 5, 6].Value?.ToString()!;
 
             int counter = 0;
@@ -101,27 +106,6 @@ namespace Payslip.API.Helpers
                 (!string.IsNullOrEmpty(worksheet.Cells[index + 8 + counter, 6].Value.ToString())) &&
                 (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true));
 
-            counter = 0;
-            Dictionary<int, string> descriptions = new Dictionary<int, string>();
-            do
-            {
-                descriptions.Add(counter + 1, worksheet.Cells[index + 8 + counter, 7].Value?.ToString()!);
-                counter++;
-            }
-            while (worksheet.Cells[index + 8 + counter, 7].Value is not null &&
-                (!string.IsNullOrEmpty(worksheet.Cells[index + 8 + counter, 7].Value.ToString())) &&
-                (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true));
-
-            counter = 0;
-            Dictionary<int, string> descriptionsAmount = new Dictionary<int, string>();
-            do
-            {
-                descriptionsAmount.Add(counter + 1, worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!);
-                counter++;
-            }
-            while (worksheet.Cells[index + 8 + counter, 8].Value is not null &&
-                (!string.IsNullOrEmpty(worksheet.Cells[index + 8 + counter, 8].Value.ToString())) &&
-                 (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true));
 
 
             var totalSalaryAndBenefits = worksheet.Cells[index + 20, 4].Value?.ToString()!;
@@ -130,26 +114,17 @@ namespace Payslip.API.Helpers
 
             return new PayslipCommand()
             {
-                AccountNumber = accountNumber,
-                Bank = bank,
                 CardNumber = cardNumber,
                 ContractType = contractType,
-                CostCenter = costCenter,
-                DailySalary = dailySalary,
-                Date =date,
                 Deductions = deductions,
                 DeductionsAmount = deductionsAmount,
-                Descriptions = descriptions,
-                DescriptionsAmount= descriptionsAmount,
-                DetailAccountCode = detailAccountCode,
                 Durations = durations,
                 FirstName = firstName,
                 LastName = lastName,
-                Location= location,
+                Location = location,
                 NetPayable = netPayable,
-                PersonellCode = personellCode,
-                Position= position,
-                SalaryAndBenefits= salaryAndBenefits,
+                Position = position,
+                SalaryAndBenefits = salaryAndBenefits,
                 SalaryAndBenefitsAmount = salaryAndBenefitsAmounts,
                 TotalDeductions = totaldeductions,
                 TotalSalaryAndBenefits = totalSalaryAndBenefits

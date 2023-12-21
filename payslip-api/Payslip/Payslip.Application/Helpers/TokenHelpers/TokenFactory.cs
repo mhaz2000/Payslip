@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Payslip.Application.Helpers
+namespace Payslip.Application.Helpers.TokenHelpers
 {
     public class TokenFactory : ITokenFactory
     {

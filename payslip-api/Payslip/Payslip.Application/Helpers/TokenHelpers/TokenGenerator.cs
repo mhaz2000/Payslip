@@ -3,7 +3,7 @@ using Payslip.Application.Base;
 using Payslip.Core.Entities;
 using System.Security.Claims;
 
-namespace Payslip.Application.Helpers
+namespace Payslip.Application.Helpers.TokenHelpers
 {
     public class TokenGenerator : ITokenGenerator
     {

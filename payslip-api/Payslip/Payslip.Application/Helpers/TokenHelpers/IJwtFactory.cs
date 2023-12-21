@@ -1,7 +1,7 @@
 ﻿using Payslip.Core.Entities;
 using System.Security.Claims;
 
-namespace Payslip.Application.Helpers
+namespace Payslip.Application.Helpers.TokenHelpers
 {
     public interface IJwtFactory
     {

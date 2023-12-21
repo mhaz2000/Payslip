@@ -2,7 +2,7 @@
 using Payslip.Application.Base;
 using Payslip.Application.Commands;
 using Payslip.Application.DTOs;
-using Payslip.Application.Helpers;
+using Payslip.Application.Helpers.TokenHelpers;
 using Payslip.Core.Entities;
 using Payslip.Core.Repositories.Base;
 

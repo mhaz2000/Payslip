@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Payslip.Application.Base;
 using Payslip.Application.Commands;
-using Payslip.Application.Helpers;
+using Payslip.Application.Helpers.TokenHelpers;
 using Payslip.Application.Services;
 using Payslip.Core.Entities;
 using Payslip.Core.Repositories.Base;
