@@ -24,35 +24,35 @@ namespace Payslip.Infrastructure.Data
 
             builder.Entity<UserPayslip>()
                 .Property(c => c.SalaryAndBenefits)
-                .HasColumnType("json")
+                .HasColumnType("nvarchar(max)")
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
 
             builder.Entity<UserPayslip>()
                 .Property(c => c.SalaryAndBenefitsAmount)
-                .HasColumnType("json")
+                .HasColumnType("nvarchar(max)")
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
 
             builder.Entity<UserPayslip>()
                 .Property(c => c.Deductions)
-                .HasColumnType("json")
+                .HasColumnType("nvarchar(max)")
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
 
             builder.Entity<UserPayslip>()
                 .Property(c => c.DeductionsAmount)
-                .HasColumnType("json")
+                .HasColumnType("nvarchar(max)")
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
 
             builder.Entity<UserPayslip>()
                 .Property(c => c.Durations)
-                .HasColumnType("json")
+                .HasColumnType("nvarchar(max)")
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);

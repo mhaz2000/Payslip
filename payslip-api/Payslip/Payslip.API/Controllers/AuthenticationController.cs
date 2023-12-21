@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Payslip.API.Base;
 using Payslip.Application.Base;
 using Payslip.Application.Commands;
@@ -26,6 +27,7 @@ namespace Payslip.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginCommand loginDto)
         {

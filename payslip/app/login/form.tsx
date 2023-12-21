@@ -32,7 +32,7 @@ const LoginForm = () => {
 
       debugger;
       if (res?.ok) {
-        router.push("/");
+        router.push("/dashboard");
         router.refresh();
       }
       else if(res?.status === 401 || res?.status === 403){
