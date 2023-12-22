@@ -27,6 +27,16 @@ namespace Payslip.API.Controllers
 
         }
 
+        [HttpPut("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordCommand command)
+        {
+            command.Validate();
+
+            await _authenticationService.ChangePassword(UserId, command);
+
+            return Ok();
+        }
+
         [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginCommand loginDto)

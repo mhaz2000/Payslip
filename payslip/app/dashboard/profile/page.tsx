@@ -1,12 +1,25 @@
 "use client";
 
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { FormEvent, useState } from "react";
 
 const Profile = () => {
+  const axiosAuth = useAxiosAuth();
+
   const [prevPassEmpty, setPrevPassEmpty] = useState(false);
   const [newPassEmpty, setNewPassEmpty] = useState(false);
   const [newPassRepEmpty, setNewPassRepEmpty] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const changePasswordRequest = async (
+    oldPassword: string,
+    newPassword: string
+  ) => {
+    const res = await useAxiosAuth().post("/api/Authentication", {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    });
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,9 +37,10 @@ const Profile = () => {
       (newPassword.valueOf() as string).length &&
       (newPasswordRep.valueOf() as string).length
     ) {
-      debugger;
       if (newPassword !== newPasswordRep)
         setError("رمز عبور جدید با تکرار آن برابر نیست.");
+      else {
+      }
     } else {
       if (!oldPassword || (oldPassword.valueOf() as string).trim().length === 0)
         setPrevPassEmpty(true);
@@ -86,7 +100,9 @@ const Profile = () => {
         >
           ارسال
         </button>
-        <p className="text-red-600 text-lg mb-6 absolute -bottom-0.5">{error}</p>
+        <p className="text-red-600 text-lg mb-6 absolute -bottom-0.5">
+          {error}
+        </p>
       </form>
     </div>
   );

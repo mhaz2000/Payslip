@@ -6,6 +6,7 @@ using FluentAssertions;
 using Payslip.Application.Services;
 using Payslip.Application.Commands;
 using FluentValidation;
+using System;
 
 namespace Payslip_Api.Sections.Authentications.Actions
 {
@@ -21,6 +22,7 @@ namespace Payslip_Api.Sections.Authentications.Actions
             _authenticationController = new AuthenticationController(_authenticationService!);
         }
 
+        #region login
 
         [Theory]
         [InlineData("1990919677", "113")]
@@ -74,6 +76,56 @@ namespace Payslip_Api.Sections.Authentications.Actions
                 .Should().ThrowAsync<ValidationException>().WithMessage("نام کاربری الزامی است.\nرمز عبور الزامی است.");
         }
 
+        #endregion
 
+        #region change password
+
+        [Theory]
+        [InlineData("123", "1234")]
+        [InlineData("123", "")]
+        [InlineData("123", "        ")]
+        [InlineData("123", "15  54  ")]
+        public void Should_Raise_Error_When_New_Password_Policy_Is_Wrong(string oldPassword, string newPassword)
+        {
+            //Arrange
+            var changePasswordCommand = new ChangePasswordCommand()
+            {
+                NewPassword = newPassword,
+                OldPassword = oldPassword,
+            };
+
+            //Act
+            var act = async () => await _authenticationController.ChangePassword(changePasswordCommand);
+            act.Invoke();
+
+            //Assert
+            act.Should().ThrowAsync<ValidationException>();
+        }
+
+        [Theory]
+        [InlineData("12345678", "87654321")]
+        public async void Should_Return_Ok_When_New_Password_Is_Correct(string oldPassword, string newPassword)
+        {
+            //Arrange
+            var changePasswordCommand = new ChangePasswordCommand()
+            {
+                NewPassword = newPassword,
+                OldPassword = oldPassword,
+            };
+
+            //Act
+            var act = async () => await _authenticationController.ChangePassword(changePasswordCommand);
+            var response = await act.Invoke();
+            var result = (ObjectResult)response;
+
+            //Assert
+            await act.Should().NotThrowAsync<ValidationException>();
+            A.CallTo(()=> _authenticationService.ChangePassword(A<Guid>._, changePasswordCommand)).MustHaveHappenedOnceExactly();
+
+            response.Should().BeOfType<OkObjectResult>();
+            result.StatusCode.Should().Be(200);
+        }
+
+        #endregion
     }
 }

@@ -150,28 +150,6 @@ namespace Payslip_Api.Sections.Authentications.Services
             act.Should().ThrowAsync<ManagedException>().WithMessage("رمز عبور قبلی اشتباه است.");
         }
 
-        //[Theory]
-        //[InlineData("123","1234")]
-        //[InlineData("123","")]
-        //[InlineData("123","        ")]
-        //[InlineData("123","15  54  ")]
-        //public void Should_Raise_Error_When_New_Password_Policy_Is_Wrong(string oldPassword, string newPassword)
-        //{
-        //    var command = new ChangePasswordCommand()
-        //    {
-        //        OldPassword = oldPassword,
-        //        NewPassword = newPassword
-        //    };
-        //    var userId = Guid.NewGuid();
-
-        //    A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(userId)).Returns(A<User>._);
-        //    A.CallTo(() => _userManager.CheckPasswordAsync(A<User>._, command.OldPassword)).Returns(true);
-
-        //    var act = async () => await _authenticationService.ChangePassword(userId, command);
-
-        //    act.Should().ThrowAsync<ManagedException>().WithMessage("رمز عبور جدید باید حداقل شامل 8 کاراکتر باشد.");
-        //}
-
         [Theory]
         [InlineData("123", "12345678")]
         public void Should_Change_Password(string oldPassword, string newPassword)
