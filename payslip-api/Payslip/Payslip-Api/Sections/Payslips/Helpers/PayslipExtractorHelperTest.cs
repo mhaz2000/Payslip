@@ -7,11 +7,11 @@ namespace Payslip_Api.Sections.Payslips.Helpers
 {
     public class PayslipExtractorHelperTest
     {
-        private readonly PayslipExtractorHelper _payslipExtractorHelper;
+        private readonly ExcelHelpler _payslipExtractorHelper;
 
         public PayslipExtractorHelperTest()
         {
-            _payslipExtractorHelper = new PayslipExtractorHelper();
+            _payslipExtractorHelper = new ExcelHelpler();
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Payslip_Api.Sections.Payslips.Helpers
             Stream stream = new FileStream(file, FileMode.Open);
 
             //Act
-            var extractedPayslips = _payslipExtractorHelper.Extract(stream);
+            var extractedPayslips = _payslipExtractorHelper.ExtractPayslips(stream);
 
             //Assert
             extractedPayslips.Should().NotBeNull();

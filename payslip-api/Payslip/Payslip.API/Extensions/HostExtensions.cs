@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Payslip.API.Helpers;
 using Payslip.Core.Entities;
 using Payslip.Infrastructure.Data;
 
@@ -32,6 +33,7 @@ namespace Payslip.API.Extensions
 
                     CreateRolesSeed(dataContext);
                     CreateAdminSeed(dataContext, _userManager);
+                    UsersSeed(dataContext, _userManager, services.GetRequiredService<IExcelHelpler>());
 
                     logger.LogInformation("Migrating database");
                 }
@@ -51,6 +53,27 @@ namespace Payslip.API.Extensions
             return host;
         }
 
+        private static void UsersSeed(DataContext dataContext, UserManager<User> userManager, IExcelHelpler excelHelpler)
+        {
+            FileStream file = new FileStream(Directory.GetCurrentDirectory() + "\\StaticFiles\\Users.xlsx", FileMode.Open);
+            var users = excelHelpler.ExtractUsers(file);
+
+            string username = "admin";
+
+            if (!dataContext.Users.Any(u => u.UserName != username))
+            {
+                foreach (var user in users)
+                {
+                    var newUser = new User(user.NationalCode, user.LastName, user.FirstName, user.NationalCode, user.CardNumber)
+                    {
+                        NormalizedUserName = user.NationalCode,
+                    };
+
+                    userManager.CreateAsync(newUser, user.NationalCode);
+                }
+                dataContext.SaveChanges();
+            }
+        }
 
         private static void CreateAdminSeed(DataContext context, UserManager<User> userManager)
         {

@@ -25,4 +25,14 @@
     <ProjectReference Include="..\Payslip.Infrastructure\Payslip.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="StaticFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="StaticFiles\Users.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

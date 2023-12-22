@@ -7,5 +7,6 @@ namespace Payslip.Application.Services
     public interface IAuthenticationService
     {
         Task<UserLoginDTO> Login(LoginCommand loginCommand, JwtIssuerOptionsModel jwtIssuerOptions);
+        Task ChangePassword(Guid userId, ChangePasswordCommand command);
     }
 }

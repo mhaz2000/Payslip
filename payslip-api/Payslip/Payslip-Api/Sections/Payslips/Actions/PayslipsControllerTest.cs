@@ -27,7 +27,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
             _config = Constant.InitConfiguration();
 
             _payslipService = A.Fake<IPayslipService>();
-            var payslipHelper = A.Fake<IPayslipExtractorHelpler>();
+            var payslipHelper = A.Fake<IExcelHelpler>();
 
             var fakeHttpContext = A.Fake<HttpContext>();
             var fakeHttpRequest = A.Fake<HttpRequest>();

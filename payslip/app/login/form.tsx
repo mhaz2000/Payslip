@@ -11,7 +11,6 @@ const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    debugger;
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username");
@@ -30,7 +29,6 @@ const LoginForm = () => {
         callbackUrl: "/register",
       });
 
-      debugger;
       if (res?.ok) {
         router.push("/dashboard");
         router.refresh();

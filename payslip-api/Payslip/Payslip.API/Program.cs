@@ -42,10 +42,10 @@ var identityBuilder = builder.Services.AddIdentity<User, IdentityRole<Guid>>(o =
 {
     // configure identity options
     o.Password.RequireDigit = true;
-    o.Password.RequireLowercase = true;
+    o.Password.RequireLowercase = false;
     o.Password.RequireUppercase = false;
     o.Password.RequireNonAlphanumeric = false;
-    o.Password.RequiredLength = 6;
+    o.Password.RequiredLength = 8;
     o.Tokens.ChangePhoneNumberTokenProvider = "Phone";
 });
 

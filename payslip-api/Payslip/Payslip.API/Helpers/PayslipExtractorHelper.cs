@@ -1,12 +1,36 @@
 ﻿using OfficeOpenXml;
+using Payslip.API.Base;
 using Payslip.Application.Commands;
-using System.Diagnostics.Metrics;
 
 namespace Payslip.API.Helpers
 {
-    public class PayslipExtractorHelper : IPayslipExtractorHelpler
+    public class ExcelHelpler : IExcelHelpler
     {
-        public IEnumerable<PayslipCommand> Extract(Stream stream)
+        public IEnumerable<UserModel> ExtractUsers(Stream stream)
+        {
+
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage(stream))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                worksheet.TrimLastEmptyRows();
+                var rowCount = worksheet.Dimension.Rows;
+
+                for (int i = 2; i < rowCount; i++)
+                {
+                    yield return new UserModel()
+                    {
+                        FirstName = worksheet.Cells[i, 2].Value.ToString(),
+                        LastName = worksheet.Cells[i, 3].Value.ToString(),
+                        NationalCode = worksheet.Cells[i, 4].Value.ToString(),
+                        CardNumber = worksheet.Cells[i, 5].Value.ToString(),
+                    };
+                }
+            }
+        }
+
+        public IEnumerable<PayslipCommand> ExtractPayslips(Stream stream)
         {
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

@@ -32,6 +32,7 @@ namespace Payslip_Api.Sections.Authentications.Services
             _authenticationService = new AuthenticationService(_unitOfWork, _tokenGenerator, _userManager);
         }
 
+        #region Login
         [Fact]
         public async Task Should_Raise_Error_When_Password_is_Wrong()
         {
@@ -124,5 +125,77 @@ namespace Payslip_Api.Sections.Authentications.Services
             result.RefreshToken.Should().Be(tokenResult.RefreshToken);
             result.IsAdmin.Should().BeFalse();
         }
+        #endregion
+
+        #region Change Password
+
+        [Fact]
+        public void Should_Raise_Error_When_Old_Password_Does_not_Match()
+        {
+            //Arrange
+            var command = new ChangePasswordCommand()
+            {
+                OldPassword = "123",
+                NewPassword = "1234"
+            };
+            var userId = Guid.NewGuid();
+            A.CallTo(()=> _userManager.CheckPasswordAsync(A<User>._, command.OldPassword)).Returns(false);
+
+            //Act
+            var act = async () => await _authenticationService.ChangePassword(userId,command);
+            act.Invoke();
+
+            //Assert
+            A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(userId)).MustHaveHappenedOnceExactly();
+            act.Should().ThrowAsync<ManagedException>().WithMessage("رمز عبور قبلی اشتباه است.");
+        }
+
+        //[Theory]
+        //[InlineData("123","1234")]
+        //[InlineData("123","")]
+        //[InlineData("123","        ")]
+        //[InlineData("123","15  54  ")]
+        //public void Should_Raise_Error_When_New_Password_Policy_Is_Wrong(string oldPassword, string newPassword)
+        //{
+        //    var command = new ChangePasswordCommand()
+        //    {
+        //        OldPassword = oldPassword,
+        //        NewPassword = newPassword
+        //    };
+        //    var userId = Guid.NewGuid();
+
+        //    A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(userId)).Returns(A<User>._);
+        //    A.CallTo(() => _userManager.CheckPasswordAsync(A<User>._, command.OldPassword)).Returns(true);
+
+        //    var act = async () => await _authenticationService.ChangePassword(userId, command);
+
+        //    act.Should().ThrowAsync<ManagedException>().WithMessage("رمز عبور جدید باید حداقل شامل 8 کاراکتر باشد.");
+        //}
+
+        [Theory]
+        [InlineData("123", "12345678")]
+        public void Should_Change_Password(string oldPassword, string newPassword)
+        {
+            //Arrange
+            var command = new ChangePasswordCommand()
+            {
+                OldPassword = oldPassword,
+                NewPassword = newPassword
+            };
+
+            var userId = Guid.NewGuid();
+
+            A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(userId)).Returns(new User());
+            A.CallTo(() => _userManager.CheckPasswordAsync(A<User>._, command.OldPassword)).Returns(true);
+
+            //Act
+            var act = async () => await _authenticationService.ChangePassword(userId, command);
+            act.Invoke();
+
+            //Assert
+            A.CallTo(() => _userManager.PasswordHasher.HashPassword(A<User>._, command.NewPassword)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _unitOfWork.CommitAsync()).MustHaveHappenedOnceExactly();
+        }
+        #endregion
     }
 }

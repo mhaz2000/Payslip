@@ -22,7 +22,7 @@ namespace Payslip.API
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IPayslipService, PayslipService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IPayslipExtractorHelpler, PayslipExtractorHelper>();
+            services.AddScoped<IExcelHelpler, ExcelHelpler>();
         }
     }
 }

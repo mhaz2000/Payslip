@@ -14,8 +14,8 @@ namespace Payslip.API.Controllers
     public class PayslipsController : ApiControllerBase
     {
         private readonly IPayslipService _payslipService;
-        private readonly IPayslipExtractorHelpler _payslipExtractorHelpler;
-        public PayslipsController(IPayslipService payslipService, IPayslipExtractorHelpler payslipExtractorHelpler)
+        private readonly IExcelHelpler _payslipExtractorHelpler;
+        public PayslipsController(IPayslipService payslipService, IExcelHelpler payslipExtractorHelpler)
         {
             _payslipService = payslipService;
             _payslipExtractorHelpler = payslipExtractorHelpler;
@@ -38,7 +38,7 @@ namespace Payslip.API.Controllers
             using (var stream = new MemoryStream())
             {
                 await dto.File.CopyToAsync(stream);
-                payslips = _payslipExtractorHelpler.Extract(stream).ToList();
+                payslips = _payslipExtractorHelpler.ExtractPayslips(stream).ToList();
             }
 
             await _payslipService.CreatePayslips(payslips, year, month);

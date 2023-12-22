@@ -2,7 +2,7 @@
 
 namespace Payslip.API.Helpers
 {
-    public static class ExcelWorkSheetHelper
+    public static class ExcelHelper
     {
         public static bool IsLastRowEmpty(this ExcelWorksheet worksheet)
         {

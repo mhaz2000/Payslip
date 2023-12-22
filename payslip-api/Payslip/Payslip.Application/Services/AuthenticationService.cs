@@ -20,6 +20,19 @@ namespace Payslip.Application.Services
             _userManager = userManager;
         }
 
+        public async Task ChangePassword(Guid userId, ChangePasswordCommand command)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user is null)
+                throw new ManagedException("کاربر مورد نظر یافت نشد.");
+
+            if(!(await _userManager.CheckPasswordAsync(user, command.OldPassword)))
+                throw new ManagedException("رمز عبور قبلی اشتباه است.");
+
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, command.NewPassword);
+            await _unitOfWork.CommitAsync();
+        }
+
         public async Task<UserLoginDTO> Login(LoginCommand loginCommand, JwtIssuerOptionsModel jwtIssuerOptions)
         {
             var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(c => c.UserName == loginCommand.Username);
