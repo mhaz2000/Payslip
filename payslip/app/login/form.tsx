@@ -1,14 +1,16 @@
 "use client";
 
+import "react-toastify/ReactToastify.css";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { displayError } from "@/lib/toastDisplay";
+
 
 const LoginForm = () => {
   const router = useRouter();
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,13 +34,9 @@ const LoginForm = () => {
       if (res?.ok) {
         router.push("/dashboard");
         router.refresh();
+      } else if (res?.status === 401 || res?.status === 403) {
+        displayError("نام کاربری یا رمز عبور اشتباه است.");
       }
-      else if(res?.status === 401 || res?.status === 403){
-        setError('نام کاربری یا رمز عبور اشتباه است.')
-      }
-
-
-
     } else {
       if (!username || (username.valueOf() as string).trim().length === 0)
         setUsernameEmpty(true);
@@ -57,7 +55,6 @@ const LoginForm = () => {
       <input
         name="username"
         type="username"
-        onClick={()=> setError(null)}
         onChange={(e) => {
           if (e.target.value.length > 0) setUsernameEmpty(false);
         }}
@@ -68,7 +65,6 @@ const LoginForm = () => {
       <input
         name="password"
         type="password"
-        onClick={()=> setError(null)}
         onChange={(e) => {
           if (e.target.value.length > 0) setPasswordEmpty(false);
         }}
@@ -82,10 +78,6 @@ const LoginForm = () => {
       >
         ورود
       </button>
-
-      {
-        error && <p className="text-red-600">{error}</p>
-      }
     </form>
   );
 };

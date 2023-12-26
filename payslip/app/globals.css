@@ -16,6 +16,10 @@
   }
 }
 
+.btn-style{
+  @apply border-2 rounded-xl py-1 px-5  hover:bg-gray-300 hover:text-slate-900 ease-in duration-300 cursor-pointer
+}
+
 .gradient-bg{
   @apply bg-gradient-to-b from-gray-800 via-cyan-900 to-cyan-950
 }
@@ -43,3 +47,12 @@ body {
 .dir-right {
   direction: rtl;
 }
+
+.bg-table{
+  background-color: #092635;
+}
+
+.border-pagination{
+  border-color: #092635;
+}
+

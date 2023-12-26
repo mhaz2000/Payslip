@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const Tabs = () => {
+const DashboardTabs = () => {
   const [currentTab, setCurrentTab] = useState("");
   return (
     <div className="p-10">
@@ -27,4 +27,4 @@ const Tabs = () => {
   );
 };
 
-export default Tabs;
+export default DashboardTabs;

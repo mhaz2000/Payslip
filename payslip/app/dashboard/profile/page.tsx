@@ -1,7 +1,10 @@
 "use client";
 
+import "react-toastify/ReactToastify.css";
+
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { FormEvent, useState } from "react";
+import { displayError, displaySuccess } from "@/lib/toastDisplay";
 
 const Profile = () => {
   const axiosAuth = useAxiosAuth();
@@ -9,19 +12,24 @@ const Profile = () => {
   const [prevPassEmpty, setPrevPassEmpty] = useState(false);
   const [newPassEmpty, setNewPassEmpty] = useState(false);
   const [newPassRepEmpty, setNewPassRepEmpty] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const changePasswordRequest = async (
     oldPassword: string,
     newPassword: string
   ) => {
-    const res = await useAxiosAuth().post("/api/Authentication", {
-      oldPassword: oldPassword,
-      newPassword: newPassword,
-    });
+    try {
+      const res = await axiosAuth.put(`/api/Authentication/ChangePassword`, {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      });
+
+      displaySuccess('رمز عبور با موفقیت تغییر یافت.')
+    } catch (error: any) {
+      displayError(error.data.message);
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -38,8 +46,12 @@ const Profile = () => {
       (newPasswordRep.valueOf() as string).length
     ) {
       if (newPassword !== newPasswordRep)
-        setError("رمز عبور جدید با تکرار آن برابر نیست.");
+        displayError("رمز عبور و تکرار آن یکسان نیست.");
       else {
+        await changePasswordRequest(
+          oldPassword.valueOf() as string,
+          newPassword.valueOf() as string
+        );
       }
     } else {
       if (!oldPassword || (oldPassword.valueOf() as string).trim().length === 0)
@@ -65,7 +77,6 @@ const Profile = () => {
         <input
           name="oldPassword"
           type="password"
-          onClick={() => setError(null)}
           onChange={(e) => {
             if (e.target.value.length > 0) setPrevPassEmpty(false);
           }}
@@ -76,7 +87,6 @@ const Profile = () => {
         <input
           name="newPassword"
           type="password"
-          onClick={() => setError(null)}
           onChange={(e) => {
             if (e.target.value.length > 0) setNewPassEmpty(false);
           }}
@@ -87,7 +97,6 @@ const Profile = () => {
         <input
           name="newPasswordRep"
           type="password"
-          onClick={() => setError(null)}
           onChange={(e) => {
             if (e.target.value.length > 0) setNewPassRepEmpty(false);
           }}
@@ -100,9 +109,6 @@ const Profile = () => {
         >
           ارسال
         </button>
-        <p className="text-red-600 text-lg mb-6 absolute -bottom-0.5">
-          {error}
-        </p>
       </form>
     </div>
   );

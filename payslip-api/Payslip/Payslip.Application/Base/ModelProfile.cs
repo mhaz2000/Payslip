@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Payslip.Application.Commands;
+using Payslip.Application.DTOs;
 using Payslip.Core.Entities;
 using Payslip.Core.Repositories.Base;
 
@@ -11,6 +12,8 @@ namespace Payslip.Application.Base
         {
             CreateMap<PayslipCommand, UserPayslip>()
                 .ForMember(c=> c.User, opt => opt.MapFrom<UserResolver>());
+
+            CreateMap<User, UserDTO>();
         }
     }
 

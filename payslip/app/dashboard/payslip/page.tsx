@@ -1,6 +1,11 @@
+"use client";
+
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import DropDown from "./components/DropDown";
 
 const Payslip = () => {
+  const axiosAuth = useAxiosAuth();
+
   return (
     <div className="">
       <div className="flex flex-col w-full items-center">

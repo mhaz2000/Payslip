@@ -17,7 +17,7 @@ const handler = NextAuth({
       },
       async authorize(credentials, req)
       {
-        const res = await fetch(`${process.env.API_URL}/api/authentication/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
           method: "POST",
           body: JSON.stringify({
             username: credentials?.username,
@@ -33,7 +33,6 @@ const handler = NextAuth({
           return data;
         }
 
-
         return null;
       },
     }),
@@ -46,6 +45,7 @@ const handler = NextAuth({
     async session({ session, token, user })
     {
       session.user = token;
+      session.user.name = token['isAdmin'] ? 'admin' : '';
       return session;
     },
   },

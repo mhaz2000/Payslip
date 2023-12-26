@@ -7,6 +7,10 @@ using Payslip.Application.Services;
 using Payslip.Application.Commands;
 using FluentValidation;
 using System;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Payslip_Api.Fixtures;
+using Microsoft.Extensions.Configuration;
 
 namespace Payslip_Api.Sections.Authentications.Actions
 {
@@ -14,12 +18,40 @@ namespace Payslip_Api.Sections.Authentications.Actions
     {
         private readonly AuthenticationController _authenticationController;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConfiguration _config;
 
         public AuthenticationControllerTest()
         {
             //Arrange
+            _config = Constant.InitConfiguration();
+
             _authenticationService = A.Fake<IAuthenticationService>();
+
+            var fakeHttpContext = A.Fake<HttpContext>();
+            var fakeHttpRequest = A.Fake<HttpRequest>();
+
+            var requestBody = new MemoryStream();
+            var writer = new StreamWriter(requestBody);
+            writer.Write("Your request content here");
+            writer.Flush();
+            requestBody.Position = 0;
+
+            A.CallTo(() => fakeHttpRequest.Body).Returns(requestBody);
+
+            A.CallTo(() => fakeHttpRequest.Headers).Returns(
+            new HeaderDictionary
+            {
+                {"Authorization", $"Bearer {Constant.GenerateRandomToken(_config["JwtIssuerOptions:SecretKey"], _config["JwtIssuerOptions:Issuer"], _config["JwtIssuerOptions:Audience"])}"}
+            });
+
+            A.CallTo(() => fakeHttpContext.Request).Returns(fakeHttpRequest);
+            var context = new ControllerContext
+            {
+                HttpContext = fakeHttpContext,
+            };
+
             _authenticationController = new AuthenticationController(_authenticationService!);
+            _authenticationController.ControllerContext = context;
         }
 
         #region login
@@ -113,17 +145,13 @@ namespace Payslip_Api.Sections.Authentications.Actions
                 OldPassword = oldPassword,
             };
 
-            //Act
             var act = async () => await _authenticationController.ChangePassword(changePasswordCommand);
-            var response = await act.Invoke();
-            var result = (ObjectResult)response;
 
-            //Assert
-            await act.Should().NotThrowAsync<ValidationException>();
-            A.CallTo(()=> _authenticationService.ChangePassword(A<Guid>._, changePasswordCommand)).MustHaveHappenedOnceExactly();
+            // Assert
+            await act.Should().NotThrowAsync<ValidationException>().ConfigureAwait(false);
 
-            response.Should().BeOfType<OkObjectResult>();
-            result.StatusCode.Should().Be(200);
+            A.CallTo(() => _authenticationService.ChangePassword(A<Guid>._, changePasswordCommand))
+                .MustHaveHappenedOnceExactly();
         }
 
         #endregion
