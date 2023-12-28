@@ -1,12 +1,6 @@
-import DisplayUser from "./DisplayUser";
+import PayslipsList from "./payslipsList";
 
-interface UserListComponentProps {
-  handleCount: (count: number) => void;
-  current: number;
-  search: string
-}
-
-const UserList: React.FC<UserListComponentProps> = ({handleCount, current, search}) => {
+const UploadedPayslips = () => {
   return (
     <div className="flex flex-col justify-center mx-10  py-5">
       <div className="flex flex-col mt-6">
@@ -26,25 +20,19 @@ const UserList: React.FC<UserListComponentProps> = ({handleCount, current, searc
                       scope="col"
                       className="px-6 py-3 text-right tracking-wider"
                     >
-                      نام
+                      تاریخ بارگذاری
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3 text-right tracking-wider"
                     >
-                      نام خانوادگی
+                      سال مالی
                     </th>
                     <th
                       scope="col"
                       className="px-6 py-3 text-right tracking-wider"
                     >
-                      کد ملی
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-right tracking-wider"
-                    >
-                      شماره کارت
+                      ماه
                     </th>
                     <th
                       scope="col"
@@ -54,7 +42,7 @@ const UserList: React.FC<UserListComponentProps> = ({handleCount, current, searc
                     </th>
                   </tr>
                 </thead>
-                  <DisplayUser handleCount={handleCount} current={current} search={search}/>
+                <PayslipsList />
               </table>
             </div>
           </div>
@@ -64,4 +52,4 @@ const UserList: React.FC<UserListComponentProps> = ({handleCount, current, searc
   );
 };
 
-export default UserList;
+export default UploadedPayslips;

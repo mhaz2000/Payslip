@@ -1,9 +1,11 @@
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { axiosAuth } from "../axios";
+import { useRouter } from "next/navigation";
 
 const useAxiosAuth = () => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const requestIntercept = axiosAuth.interceptors.request.use((config) => {
@@ -16,7 +18,10 @@ const useAxiosAuth = () => {
     const responseIntercept = axiosAuth.interceptors.response.use(
       (response) => response,
       (error) => {
+        debugger
         // Handle errors here
+        if(error.response.status === 401 )
+          router.push('/login')
         if (error.response) {
           return Promise.reject({
             status: error.response.status,

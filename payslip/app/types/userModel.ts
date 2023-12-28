@@ -1,7 +1,8 @@
 interface UserModel {
-    id: string;
-    firstName: string;
-    lastName: string;
-    nationalCode: string;
-    cardNumber: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  nationalCode: string;
+  cardNumber: string;
+  isActive: boolean;
 }

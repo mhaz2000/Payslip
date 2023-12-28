@@ -64,6 +64,8 @@ namespace Payslip.API.Extensions
             {
                 foreach (var user in users)
                 {
+                    user.FirstName = user.FirstName.Replace('ي', 'ی').Replace("ك", "ک");
+                    user.LastName = user.LastName.Replace('ي', 'ی').Replace("ك", "ک");
                     var newUser = new User(user.NationalCode, user.LastName, user.FirstName, user.NationalCode, user.CardNumber)
                     {
                         NormalizedUserName = user.NationalCode,
@@ -113,6 +115,7 @@ namespace Payslip.API.Extensions
                 var newUserRole = new IdentityRole<Guid>()
                 {
                     Name = "User",
+                    NormalizedName = "user",
                     Id = Guid.NewGuid(),
                 };
                 context.Roles.Add(newUserRole);

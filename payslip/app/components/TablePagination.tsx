@@ -34,7 +34,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         <p
           key={page}
           className={`text-sm font-medium leading-none cursor-pointer ${
-            page + 1 === current ? "text-gray-700" : "text-gray-300"
+            page + 1 === current ? "text-white" : "text-gray-400"
           } border-t border-transparent hover:border-gray-300 pt-3 mr-4 px-2`}
           onClick={() => handlePageChange(page + 1)}
         >
