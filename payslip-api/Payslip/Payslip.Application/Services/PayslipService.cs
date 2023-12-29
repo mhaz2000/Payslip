@@ -20,7 +20,7 @@ namespace Payslip.Application.Services
             _mapper = mapper;
         }
 
-        public async Task CreatePayslips(IEnumerable<PayslipCommand> payslipsCommand, int year, int month)
+        public async Task CreatePayslips(IEnumerable<PayslipCommand> payslipsCommand, int year, int month, Guid fileId)
         {
             (year, Month parsedMonth) = DateHelper.ValidateDate(year, month);
 
@@ -32,6 +32,7 @@ namespace Payslip.Application.Services
             {
                 payslip.Month = parsedMonth;
                 payslip.Year = year;
+                payslip.FileId = fileId;
             }
 
             await _unitOfWork.PayslipRepository.AddRangeAsync(payslips);

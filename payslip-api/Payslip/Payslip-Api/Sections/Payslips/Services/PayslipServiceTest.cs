@@ -38,7 +38,7 @@ namespace Payslip_Api.Sections.Payslips.Services
             var payslipCommands = GeneratePayslipCommandData(3);
 
             //Act
-            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 10);
+            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 10, Guid.NewGuid());
 
             await act.Should().NotThrowAsync();
 
@@ -54,7 +54,7 @@ namespace Payslip_Api.Sections.Payslips.Services
             var payslipCommands = new List<PayslipCommand>();
 
             //Act
-            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 5);
+            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 5, Guid.NewGuid());
 
             await act.Should().ThrowExactlyAsync<ManagedException>().WithMessage("خطایی در خواندن مقادیر اکسل ارسالی رخ داده است.");
 

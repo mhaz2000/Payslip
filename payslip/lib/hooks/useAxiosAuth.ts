@@ -1,27 +1,30 @@
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { axiosAuth } from "../axios";
+import { axiosAuth, axiosFormDataAuth } from "../axios";
 import { useRouter } from "next/navigation";
+import { AxiosInstance } from "axios";
 
-const useAxiosAuth = () => {
+const useAxiosAuth = (formData: boolean | null = null) => {
   const { data: session } = useSession();
   const router = useRouter();
+  let axios: AxiosInstance;
+
+  if (formData) axios = axiosFormDataAuth;
+  else axios = axiosAuth;
 
   useEffect(() => {
-    const requestIntercept = axiosAuth.interceptors.request.use((config) => {
+    const requestIntercept = axios.interceptors.request.use((config) => {
       if (!config.headers["Authorization"])
         config.headers["Authorization"] = `Bearer ${session?.user.authToken}`;
 
       return config;
     });
 
-    const responseIntercept = axiosAuth.interceptors.response.use(
+    const responseIntercept = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        debugger
         // Handle errors here
-        if(error.response.status === 401 )
-          router.push('/login')
+        if (error.response.status === 401) router.push("/login");
         if (error.response) {
           return Promise.reject({
             status: error.response.status,
@@ -41,12 +44,12 @@ const useAxiosAuth = () => {
     );
 
     return () => {
-      axiosAuth.interceptors.request.eject(requestIntercept);
-      axiosAuth.interceptors.response.eject(responseIntercept);
+      axios.interceptors.request.eject(requestIntercept);
+      axios.interceptors.response.eject(responseIntercept);
     };
   }, [session]);
 
-  return axiosAuth;
+  return axios;
 };
 
 export default useAxiosAuth;

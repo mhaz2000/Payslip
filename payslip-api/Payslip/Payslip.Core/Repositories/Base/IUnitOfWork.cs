@@ -2,6 +2,7 @@
 {
     public interface IUnitOfWork
     {
+        IFileRepository FileRepository { get; }
         IUserRepository UserRepository { get; }
         IRoleRepository RoleRepository { get; }
         IPayslipRepository PayslipRepository { get; }

@@ -47,7 +47,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    debugger;
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -153,19 +152,21 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             </div>
           </div>
           <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b gap-4">
-            <button
-              className="btn-style bg-transparent border-red-500 text-red-500 hover:bg-red-500 w-24"
-              type="submit"
-              onClick={() => closeModal()}
-            >
-              بستن
-            </button>
-            <button
-              className="btn-style bg-transparent border-green-500 text-green-500 hover:bg-green-500 w-24"
-              type="submit"
-            >
-              ثبت
-            </button>
+            <div className="mx-auto flex flex-row gap-4">
+              <button
+                className="btn-style bg-transparent border-red-500 text-red-500 hover:bg-red-500 w-24"
+                type="submit"
+                onClick={() => closeModal()}
+              >
+                بستن
+              </button>
+              <button
+                className="btn-style bg-transparent border-green-500 text-green-500 hover:bg-green-500 w-24"
+                type="submit"
+              >
+                ثبت
+              </button>
+            </div>
           </div>
         </form>
       </div>

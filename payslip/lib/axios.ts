@@ -6,9 +6,7 @@ export const axiosAuth = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// console.log(BASE_URL);
-// export default axios.create({
-//   baseURL: BASE_URL,
-//   headers: { "Content-Type": "application/json" },
-// });
-
+export const axiosFormDataAuth = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "multipart/form-data" },
+});

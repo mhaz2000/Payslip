@@ -19,6 +19,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
 {
     public class PayslipsControllerTest
     {
+        private readonly IFileService _fileService;
         private readonly IPayslipService _payslipService;
         private readonly PayslipsController _payslipsController;
         private readonly IConfiguration _config;
@@ -26,6 +27,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
         {
             _config = Constant.InitConfiguration();
 
+            _fileService = A.Fake<IFileService>();
             _payslipService = A.Fake<IPayslipService>();
             var payslipHelper = A.Fake<IExcelHelpler>();
 
@@ -48,7 +50,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
 
             A.CallTo(() => fakeHttpContext.Request).Returns(fakeHttpRequest);
 
-            _payslipsController = new PayslipsController(_payslipService, payslipHelper);
+            _payslipsController = new PayslipsController(_payslipService, payslipHelper, _fileService);
             var context = new ControllerContext
             {
                 HttpContext = fakeHttpContext,
@@ -57,6 +59,17 @@ namespace Payslip_Api.Sections.Payslips.Actions
             _payslipsController.ControllerContext = context;
         }
 
+        #region get payslips
+
+        [Fact]
+        public void Should_Get_All_Uploaded_Payslips()
+        {
+
+        }
+
+        #endregion
+
+        #region get user payslips wages
         [Fact]
         public async void Should_Return_User_Payslips_Wages()
         {
@@ -89,6 +102,9 @@ namespace Payslip_Api.Sections.Payslips.Actions
             wages!.Select(s => s.Year).Should().Equal(expectedValue.Select(s => s.Year));
             wages!.Select(s => s.Months).Should().HaveCountGreaterThan(0);
         }
+        #endregion
+
+        #region payslip upload file
 
         [Fact]
         public async void Should_return_ok_when_file_uploaded()
@@ -104,9 +120,13 @@ namespace Payslip_Api.Sections.Payslips.Actions
             var result = (OkResult)response;
 
             //Assert
+            A.CallTo(() => _fileService.StoreFile(A<Stream>._, A<string>._)).MustHaveHappenedOnceExactly();
+
             response.Should().NotBeNull();
             response.Should().BeOfType<OkResult>();
             result.StatusCode.Should().Be(200);
         }
+
+        #endregion
     }
 }

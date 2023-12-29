@@ -2,24 +2,24 @@
 import { useRef, useState } from "react";
 import useOnClickOutside from "use-onclickoutside";
 
-const DropDown = ({
-  title,
-  options,
-  mapper,
-}: {
+interface DropDownProps {
   title: string;
   options: [any];
   mapper: Map<number, string> | null;
-}) => {
+  handler: (value:any) => void;
+}
+
+const DropDown = ({ title, options, mapper, handler }: DropDownProps) => {
   const [toggle, setToggle] = useState(false);
-  const [displayTitle, setDisplayTitle] = useState<string | null>(title);
+  const [displayTitle, setDisplayTitle] = useState<string | null | undefined>(title);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(modalRef, () => setToggle(false));
 
-  const clickHandler = (value: string) => {
-    setDisplayTitle(value);
+  const clickHandler = (value: any) => {
+    setDisplayTitle(mapper ? mapper.get(value) : value);
     setToggle(false);
+    handler(value)
   };
 
   return (
@@ -60,13 +60,14 @@ const DropDown = ({
           options[options.length - 1] > 1411 ? "overflow-y-scroll" : ""
         } ${
           toggle ? "" : "hidden"
-        } text-xs w-52 mt-2 bg-white rounded-lg shadow-xl`}
+        } text-xs w-52 mt-2 rounded-lg shadow-xl py-2`}
       >
         {options.map((option) => (
           <div
-            className="flex justify-center items-center w-14 h-10 text-gray-800 hover:bg-indigo-500 hover:text-white"
+            className="flex justify-center items-center w-14 h-10 text-gray-800 hover:bg-slate-700 hover:rounded-md hover:text-white
+             hover:shadow-xl cursor-pointer ease-in duration-150"
             key={option}
-            onClick={() => clickHandler(mapper ? mapper.get(option) : option)}
+            onClick={() => clickHandler(option)}
           >
             {mapper ? mapper.get(option) : option}
           </div>

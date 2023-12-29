@@ -3,13 +3,18 @@ import { useState } from "react";
 import { BsCloudUploadFill } from "react-icons/bs";
 import { FaFileAlt } from "react-icons/fa";
 
-const Uploader = () => {
+interface UploaderProps {
+  fileHandler: (file: any) => void;
+}
+
+const Uploader = ({ fileHandler }: UploaderProps) => {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [checkFile, setCheckFile] = useState(false);
 
   const imageHandler = (e: any) => {
     setSelectedFile(e.target.files[0]);
     setCheckFile(true);
+    fileHandler(e.target.files[0]);
   };
 
   return (

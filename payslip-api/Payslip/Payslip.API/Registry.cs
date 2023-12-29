@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
-using Payslip.API.Helpers;
-using Payslip.Application.Base;
+﻿using Payslip.API.Helpers;
 using Payslip.Application.Helpers.TokenHelpers;
 using Payslip.Application.Services;
 using Payslip.Core.Repositories.Base;
@@ -21,6 +18,7 @@ namespace Payslip.API
             services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IPayslipService, PayslipService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IExcelHelpler, ExcelHelpler>();

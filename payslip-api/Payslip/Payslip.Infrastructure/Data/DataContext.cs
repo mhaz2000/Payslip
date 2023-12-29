@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Payslip.Core.Entities;
 using Payslip.Infrastructure.Extensions;
+using System.IO;
 
 namespace Payslip.Infrastructure.Data
 {
@@ -15,6 +16,7 @@ namespace Payslip.Infrastructure.Data
         }
 
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<FileModel> FileModels { get; set; }
         public virtual DbSet<UserPayslip> UserPayslips { get; set; }
         public virtual DbSet<IdentityRole<Guid>> Roles { get; set; }
 

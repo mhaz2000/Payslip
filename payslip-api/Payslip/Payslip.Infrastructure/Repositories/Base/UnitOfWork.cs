@@ -10,6 +10,7 @@ namespace Payslip.Infrastructure.Repositories.Base
 
 
         private RoleRepository? _roleRepository;
+        private FileRepository? _fileRepository;
         private UserRepository? _userRepository;
         private PayslipRepository _payslipRepository;
 
@@ -18,6 +19,8 @@ namespace Payslip.Infrastructure.Repositories.Base
         public IRoleRepository RoleRepository => _roleRepository ?? new RoleRepository(_context);
 
         public IPayslipRepository PayslipRepository => _payslipRepository ?? new PayslipRepository(_context);
+
+        public IFileRepository FileRepository => _fileRepository ?? new FileRepository(_context);
 
         public UnitOfWork(DataContext context) => _context = context;
 
