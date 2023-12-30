@@ -8,7 +8,6 @@ import UploadNewPayslip from "./components/uploadNewPayslip";
 const PayslipsUpload = () => {
   const [current, setCurrent] = useState(1);
   const [count, setCount] = useState(0);
-  const [search, setSearch] = useState("");
   const [gridRefresh, setGridRefresh] = useState(true);
 
   const handleCount = (count: number) => {
@@ -17,11 +16,6 @@ const PayslipsUpload = () => {
 
   const handlePageChange = (current: number) => {
     setCurrent(current);
-  };
-
-  const handleSearch = (search: string) => {
-    setSearch(search);
-    setGridRefresh((prev) => !prev);
   };
 
   const handleCreatePayslip = () => {
@@ -33,7 +27,11 @@ const PayslipsUpload = () => {
       <div className="flex flex-row w-full px-10">
         <UploadNewPayslip handleCreatePayslip={handleCreatePayslip} />
       </div>
-      <UploadedPayslips />
+      <UploadedPayslips
+        handleCount={handleCount}
+        current={current}
+        gridRefresh={gridRefresh}
+      />
       <TablePagination
         pageChangeHandler={handlePageChange}
         count={count}

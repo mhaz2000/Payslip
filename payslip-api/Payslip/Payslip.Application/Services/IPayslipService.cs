@@ -7,6 +7,9 @@ namespace Payslip.Application.Services
     public interface IPayslipService
     {
         Task CreatePayslips(IEnumerable<PayslipCommand> payslips, int year, int month, Guid fileId);
+        (IEnumerable<PayslipDTO> Payslips, int Total) GetPayslips(int skip);
+        Task<UserPayslipDTO> getUserPayslip(Guid userId);
         Task<IEnumerable<UserPayslipWagesDTO>> GetUserWages(Guid userId);
+        Task RemovePayslip(Guid id);
     }
 }

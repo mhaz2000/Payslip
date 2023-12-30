@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DropDown from "./DropDown";
+import DropDown from "../../../components/DropDown";
 import { Month, MonthMapper } from "@/app/Enums/Month";
 import Uploader from "./Uploader";
 import { displayError, displaySuccess } from "@/lib/toastDisplay";
@@ -84,12 +84,14 @@ const UploadPayslipsForm: React.FC<UploadPayslipFormProps> = ({
             options={years as [any]}
             mapper={null}
             handler={yearHandler}
+            disabled={false}
           />
           <DropDown
             title="ماه"
             options={months as [any]}
             mapper={MonthMapper}
             handler={monthHandler}
+            disabled={false}
           />
         </div>
         <div className="flex items-center justify-end py-6 px-2 border-t border-solid border-blueGray-200 rounded-b gap-4">

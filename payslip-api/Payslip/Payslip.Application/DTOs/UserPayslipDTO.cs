@@ -1,17 +1,14 @@
 ﻿using Payslip.Core.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Payslip.Core.Entities
+namespace Payslip.Application.DTOs
 {
-    public class UserPayslip : BaseEntity
+    public class UserPayslipDTO
     {
-        public UserPayslip() : base()
-        {
-
-        }
-
-        public User? User { get; set; }
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CardNumber { get; set; }

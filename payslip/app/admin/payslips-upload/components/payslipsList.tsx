@@ -1,7 +1,7 @@
 "use client";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import { displayError } from "@/lib/toastDisplay";
-import { AxiosResponse } from "axios";
+import { displayError, displaySuccess } from "@/lib/toastDisplay";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 interface Response {
@@ -9,7 +9,17 @@ interface Response {
   data: PayslipModel[];
 }
 
-const PayslipsList = () => {
+interface PayslipsListComponentProps {
+  handleCount: (count: number) => void;
+  current: number;
+  gridRefresh: boolean;
+}
+
+const PayslipsList = ({
+  handleCount,
+  current,
+  gridRefresh,
+}: PayslipsListComponentProps) => {
   const axiosAuth = useAxiosAuth();
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,32 +29,73 @@ const PayslipsList = () => {
     const fetchData = async () => {
       try {
         const response: AxiosResponse<Response> = await axiosAuth.get(
-          "payslips"
+          `/api/payslips?skip=${(current - 1) * 10}`
         );
 
         setPayslips(response.data.data);
+        handleCount(response.data.total);
       } catch (error: any) {
         displayError(error.data.message);
       }
+      setIsLoading(false);
     };
+    setIsLoading(true);
 
-    fetchData();
-  }, []);
+    setTimeout(() => {
+      fetchData();
+    }, 200);
+  }, [current, refresh, gridRefresh]);
 
-  const removePayslip = (payslipId: string) => {};
+  const removePayslip = async (payslipId: string) => {
+    try {
+      await axiosAuth.delete(`api/payslips/${payslipId}`);
+      setRefresh((prev) => (prev = !prev));
+    } catch (error: any) {
+      displayError(error.data.message);
+    }
 
-  const downloadPayslipFile = (payslipId: string) => {};
+    displaySuccess("عملیات با موفقیت انجام شد.");
+  };
+
+  const downloadPayslipFile = async (
+    payslipId: string,
+    month: number,
+    year: string
+  ) => {
+    let res = await axiosAuth.get(`api/files/${payslipId}`, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Disposition": `attachment; filename=file.xlsx`,
+        "Content-Type": "application/octet-stream",
+      },
+    });
+
+    const blob = new Blob([res.data], { type: "application/octet-stream" });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${month}-${year}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <>
       {isLoading ? (
-        <p className="my-5 text-slate-400 mr-2">در حال دریافت اطلاعات</p>
-      ) : payslips.length > 1 ? (
+        <tbody className="block m-5">
+          <tr className="my-5 text-slate-400 mr-2">
+            <td>در حال دریافت اطلاعات</td>
+          </tr>
+        </tbody>
+      ) : payslips.length > 0 ? (
         <tbody className="bg-table">
           {payslips.map((payslip, index) => (
             <tr
               className={`bg-black ${index % 2 === 0 ? "bg-opacity-20" : ""}`}
-              key={payslip.id}
+              key={payslip.fileId}
             >
               <td className="pr-7">{index + 1}</td>
               <td className="flex px-6 py-4 whitespace-nowrap">
@@ -53,26 +104,36 @@ const PayslipsList = () => {
               <td className="px-6 py-4 whitespace-nowrap">{payslip.year}</td>
               <td className="px-6 py-4 whitespace-nowrap">{payslip.month}</td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex flex-row gap-2">
+                <span className="flex flex-row gap-2">
                   <button
                     className="btn-style w-24 bg-black border-red-500 text-red-500 hover:bg-red-500"
-                    onClick={() => removePayslip(payslip.id)}
+                    onClick={() => removePayslip(payslip.fileId)}
                   >
                     حذف
                   </button>
                   <button
-                    onClick={() => downloadPayslipFile(payslip.id)}
+                    onClick={() =>
+                      downloadPayslipFile(
+                        payslip.fileId,
+                        payslip.year,
+                        payslip.month
+                      )
+                    }
                     className={`btn-style w-24 bg-black border-blue-500 text-blue-500 hover:bg-blue-500`}
                   >
                     دانلود
                   </button>
-                </div>
+                </span>
               </td>
             </tr>
           ))}
         </tbody>
       ) : (
-        <p className="my-5 text-slate-400 mr-2">اطلاعاتی یافت نشد.</p>
+        <tbody className="block m-5">
+          <tr className="my-5 text-slate-400 mr-2">
+            <td>اطلاعاتی یافت نشد.</td>
+          </tr>
+        </tbody>
       )}
     </>
   );

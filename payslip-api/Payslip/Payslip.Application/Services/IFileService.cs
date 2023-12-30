@@ -6,6 +6,8 @@ namespace Payslip.Application.Services
     {
         Task<Guid> StoreFile(Stream file, string fileName);
 
-        Task<FileStream> GetFile(Guid id);
+        Task<(FileStream stream, string filename)> GetFile(Guid id);
+
+        Task RemoveFile(Guid id);
     }
 }

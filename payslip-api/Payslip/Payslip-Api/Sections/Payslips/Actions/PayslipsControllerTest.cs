@@ -3,9 +3,11 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Payslip.API.Base;
 using Payslip.API.Controllers;
 using Payslip.API.Helpers;
 using Payslip.Application.DTOs;
+using Payslip.Application.Helpers;
 using Payslip.Application.Services;
 using Payslip.Core.Enums;
 using Payslip_Api.Fixtures;
@@ -59,12 +61,69 @@ namespace Payslip_Api.Sections.Payslips.Actions
             _payslipsController.ControllerContext = context;
         }
 
+        #region remove payslip
+
+        [Fact]
+        public async void Should_Remove_Payslip()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+
+            //Act
+            var respnose = await _payslipsController.RemovePayslip(id);
+            var result = (OkResult)respnose;
+
+            respnose.Should().NotBeNull();
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+        }
+
+        #endregion
+
         #region get payslips
 
         [Fact]
         public void Should_Get_All_Uploaded_Payslips()
         {
+            //Arrange
+            var expectedValues = new List<PayslipDTO>()
+            {
+                new PayslipDTO()
+                {
+                    FileId = Guid.NewGuid(),
+                    Month = Month.Aban.GetDescription(),
+                    UploadedDate= DateTime.Now,
+                    Year = 1402
+                },
+                new PayslipDTO()
+                {
+                    FileId = Guid.NewGuid(),
+                    Month = Month.Azar.GetDescription(),
+                    UploadedDate= DateTime.Now,
+                    Year = 1402
+                },
+                new PayslipDTO()
+                {
+                    FileId = Guid.NewGuid(),
+                    Month = Month.Dey.GetDescription(),
+                    UploadedDate= DateTime.Now,
+                    Year = 1402
+                }
+            };
 
+            A.CallTo(() => _payslipService.GetPayslips(A<int>._)).Returns((expectedValues, 3));
+
+            //Act
+            var response = _payslipsController.GetPayslips(5);
+            var result = (OkObjectResult)response;
+            var responseModel = result.Value as ResponseModel;
+
+            result.StatusCode.Should().Be(200);
+            responseModel.Should().NotBeNull();
+            responseModel.Total.Should().Be(3);
+
+            responseModel.Data.Should().NotBeNull();
+            responseModel.Data.Should().BeEquivalentTo(expectedValues);
         }
 
         #endregion
@@ -79,12 +138,12 @@ namespace Payslip_Api.Sections.Payslips.Actions
                 new UserPayslipWagesDTO ()
                 {
                     Year = 1401,
-                    Months = new List<Month>() { Month.Aban, Month.Azar, Month.Dey, Month.Bahman, Month.Esfand }
+                    Months = new List<int>() { Month.Aban.GetHashCode(), Month.Azar.GetHashCode(), Month.Dey.GetHashCode(), Month.Bahman.GetHashCode(), Month.Esfand.GetHashCode() }
                 },
                 new UserPayslipWagesDTO ()
                 {
                     Year = 1402,
-                    Months = new List<Month>() { Month.Farvardin, Month.Ordibehesht}
+                    Months = new List<int>() { Month.Farvardin.GetHashCode(), Month.Ordibehesht.GetHashCode() }
                 },
             };
 

@@ -1,6 +1,7 @@
 ﻿using Payslip.Application.Base;
 using Payslip.Core.Entities;
 using Payslip.Core.Repositories.Base;
+using System.IO;
 
 namespace Payslip.Application.Services
 {
@@ -12,7 +13,7 @@ namespace Payslip.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<FileStream> GetFile(Guid id)
+        public async Task<(FileStream stream, string filename)> GetFile(Guid id)
         {
             var fileModel = await _unitOfWork.FileRepository.GetByIdAsync(id);
             if (fileModel is null)
@@ -24,7 +25,17 @@ namespace Payslip.Application.Services
             if (!File.Exists(filePath))
                 throw new ManagedException("فایل مورد نظر یافت نشد.");
 
-            return new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return (new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), fileModel.Name);
+        }
+
+        public async Task RemoveFile(Guid id)
+        {
+            var fileModel = await _unitOfWork.FileRepository.FirstOrDefaultAsync(x => x.Id == id);
+            _unitOfWork.FileRepository.Remove(fileModel);
+
+            var path = Directory.GetCurrentDirectory() + "\\FileManager";
+            File.Delete(path + $"\\{id}.dat");
+
         }
 
         public async Task<Guid> StoreFile(Stream file, string fileName)
@@ -38,6 +49,7 @@ namespace Payslip.Application.Services
 
             using (var fileStream = new FileStream(dir, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
             {
+                file.Position = 0;
                 await file.CopyToAsync(fileStream);
             }
 

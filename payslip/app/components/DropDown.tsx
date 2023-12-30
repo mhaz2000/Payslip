@@ -3,13 +3,16 @@ import { useRef, useState } from "react";
 import useOnClickOutside from "use-onclickoutside";
 
 interface DropDownProps {
+
   title: string;
   options: [any];
   mapper: Map<number, string> | null;
   handler: (value:any) => void;
+  disabled:boolean
 }
 
-const DropDown = ({ title, options, mapper, handler }: DropDownProps) => {
+const DropDown = ({ title, options, mapper, handler, disabled }: DropDownProps) => {
+  debugger
   const [toggle, setToggle] = useState(false);
   const [displayTitle, setDisplayTitle] = useState<string | null | undefined>(title);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -25,6 +28,7 @@ const DropDown = ({ title, options, mapper, handler }: DropDownProps) => {
   return (
     <div className="flex-none p-2 ">
       <button
+        disabled={disabled}
         onClick={() => setToggle(!toggle)}
         className="flex flex-row-reverse justify-between w-52 px-2 py-2 text-gray-700 bg-gray-200 border-2 border-white rounded-md shadow focus:outline-none focus:border-blue-600"
       >

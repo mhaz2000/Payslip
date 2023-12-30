@@ -20,6 +20,7 @@ namespace Payslip_Api.Sections.FileManager.Services
             _fileService = new FileService(_unitOfWork);
         }
 
+        #region store file
         [Fact]
         public async void Should_Store_File()
         {
@@ -34,6 +35,10 @@ namespace Payslip_Api.Sections.FileManager.Services
 
         }
 
+        #endregion
+
+        #region Get file
+
         [Fact]
         public async void Should_Raise_Error_When_File_Does_Not_Exist()
         {
@@ -46,5 +51,7 @@ namespace Payslip_Api.Sections.FileManager.Services
             //Assert
             await _fileService.Invoking(c=> c.GetFile(id)).Should().ThrowAsync<ManagedException>().WithMessage("فایل مورد نظر یافت نشد.");
         }
+
+        #endregion
     }
 }

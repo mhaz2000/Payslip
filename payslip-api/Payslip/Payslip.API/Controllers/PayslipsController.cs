@@ -23,6 +23,31 @@ namespace Payslip.API.Controllers
             _fileService = fileService;
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemovePayslip(Guid id)
+        {
+            await _payslipService.RemovePayslip(id);
+            return Ok();
+        }
+
+        [HttpGet("UserPayslip")]
+        public async Task<IActionResult> GetUserPayslip()
+        {
+            var userPayslip = await _payslipService.getUserPayslip(UserId);
+
+            return Ok(userPayslip);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult GetPayslips(int? skip = 0)
+        {
+            var data = _payslipService.GetPayslips(skip ?? 0);
+
+            return Ok(new ResponseModel(data.Total, data.Payslips));
+        }
+
         [HttpGet("wages")]
         public async Task<IActionResult> GetUserPayslipWages()
         {

@@ -92,7 +92,7 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{user.cardNumber}</td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex flex-row gap-2">
+                <span className="flex flex-row gap-2">
                   <button
                     className="btn-style w-24 bg-black border-red-500 text-red-500 hover:bg-red-500"
                     onClick={() => removeUser(user.id)}
@@ -109,7 +109,7 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
                   >
                     {user.isActive ? "غیر فعال" : "فعال"}
                   </button>
-                </div>
+                </span>
               </td>
             </tr>
           ))}

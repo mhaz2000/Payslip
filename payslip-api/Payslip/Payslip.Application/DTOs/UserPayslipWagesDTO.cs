@@ -10,6 +10,6 @@ namespace Payslip.Application.DTOs
     public class UserPayslipWagesDTO
     {
         public int Year { get; set; }
-        public IEnumerable<Month> Months { get; set; }
+        public IEnumerable<int> Months { get; set; }
     }
 }

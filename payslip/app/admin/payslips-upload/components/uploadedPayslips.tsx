@@ -1,6 +1,13 @@
+'use client'
 import PayslipsList from "./payslipsList";
 
-const UploadedPayslips = () => {
+interface UploadedPayslipsComponentProps {
+  handleCount: (count: number) => void;
+  current: number;
+  gridRefresh: boolean;
+}
+
+const UploadedPayslips = ({handleCount, current, gridRefresh}:UploadedPayslipsComponentProps) => {
   return (
     <div className="flex flex-col justify-center mx-10  py-5">
       <div className="flex flex-col mt-6">
@@ -42,7 +49,7 @@ const UploadedPayslips = () => {
                     </th>
                   </tr>
                 </thead>
-                <PayslipsList />
+                <PayslipsList handleCount={handleCount} current={current} gridRefresh={gridRefresh} />
               </table>
             </div>
           </div>
