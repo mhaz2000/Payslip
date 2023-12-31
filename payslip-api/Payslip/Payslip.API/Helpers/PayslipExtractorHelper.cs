@@ -101,7 +101,8 @@ namespace Payslip.API.Helpers
             Dictionary<int, string> salaryAndBenefitsAmounts = new Dictionary<int, string>();
             do
             {
-                salaryAndBenefitsAmounts.Add(counter + 1, worksheet.Cells[index + 8 + counter, 4].Value?.ToString()!);
+                salaryAndBenefitsAmounts.Add(counter + 1, ulong.TryParse(worksheet.Cells[index + 8 + counter, 4].Value?.ToString()!, out ulong salaryBenefit) ?
+                    salaryBenefit.ToString("n0") : "0");
                 counter++;
             }
             while (worksheet.Cells[index + 8 + counter, 4].Value is not null &&
@@ -123,18 +124,18 @@ namespace Payslip.API.Helpers
             Dictionary<int, string> deductionsAmount = new Dictionary<int, string>();
             do
             {
-                deductionsAmount.Add(counter + 1, worksheet.Cells[index + 8 + counter, 6].Value?.ToString()!);
+                deductionsAmount.Add(counter + 1, ulong.TryParse(worksheet.Cells[index + 8 + counter, 6].Value?.ToString()!, out ulong deductionAmount) ?
+                    deductionAmount.ToString("n0") : "0");
                 counter++;
             }
             while (worksheet.Cells[index + 8 + counter, 6].Value is not null &&
                 (!string.IsNullOrEmpty(worksheet.Cells[index + 8 + counter, 6].Value.ToString())) &&
                 (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true));
 
-
-
-            var totalSalaryAndBenefits = worksheet.Cells[index + 20, 4].Value?.ToString()!;
-            var totaldeductions = worksheet.Cells[index + 20, 6].Value?.ToString()!;
-            var netPayable = worksheet.Cells[index + 20, 8].Value?.ToString()!;
+            var totalSalaryAndBenefits = ulong.TryParse(worksheet.Cells[index + 20, 4].Value?.ToString()!, out ulong totalSalaryAndBenefit)
+                ? totalSalaryAndBenefit.ToString("n0") : "0";
+            var totalDeductions = ulong.TryParse(worksheet.Cells[index + 20, 6].Value?.ToString()!, out ulong totalDeduction) ? totalDeduction.ToString("n0") : "0";
+            var netPayable = ulong.TryParse(worksheet.Cells[index + 20, 8].Value?.ToString()!, out ulong parsedNetPayable) ? parsedNetPayable.ToString("n0") : "0";
 
             return new PayslipCommand()
             {
@@ -150,7 +151,7 @@ namespace Payslip.API.Helpers
                 Position = position,
                 SalaryAndBenefits = salaryAndBenefits,
                 SalaryAndBenefitsAmount = salaryAndBenefitsAmounts,
-                TotalDeductions = totaldeductions,
+                TotalDeductions = totalDeductions,
                 TotalSalaryAndBenefits = totalSalaryAndBenefits
             };
         }

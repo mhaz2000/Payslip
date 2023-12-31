@@ -32,9 +32,9 @@ namespace Payslip.API.Controllers
         }
 
         [HttpGet("UserPayslip")]
-        public async Task<IActionResult> GetUserPayslip()
+        public IActionResult GetUserPayslip(int month, int year)
         {
-            var userPayslip = await _payslipService.getUserPayslip(UserId);
+            var userPayslip = _payslipService.GetUserPayslip(UserId, month, year);
 
             return Ok(userPayslip);
         }

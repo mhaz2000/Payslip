@@ -48,6 +48,11 @@ body {
   direction: rtl;
 }
 
+
+.dir-left {
+  direction: ltr;
+}
+
 .bg-table {
   background-color: #092635;
 }
@@ -101,4 +106,9 @@ body {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   display: none;
+}
+
+.print-payslip{
+  direction: rtl;
+  font-family: IranSans;
 }

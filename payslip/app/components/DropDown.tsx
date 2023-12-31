@@ -12,7 +12,6 @@ interface DropDownProps {
 }
 
 const DropDown = ({ title, options, mapper, handler, disabled }: DropDownProps) => {
-  debugger
   const [toggle, setToggle] = useState(false);
   const [displayTitle, setDisplayTitle] = useState<string | null | undefined>(title);
   const modalRef = useRef<HTMLDivElement>(null);

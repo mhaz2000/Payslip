@@ -56,6 +56,14 @@ namespace Payslip.Application.Services
             return (payslipsDTO.Skip(skip), payslipsDTO.Count());
         }
 
+        public UserPayslipDTO GetUserPayslip(Guid userId, int month, int year)
+        {
+            var userPayslip = _unitOfWork.PayslipRepository.Include(c=> c.User)
+                .FirstOrDefault(c => c.User?.Id == userId && c.Month.GetHashCode() == month && c.Year == year);
+
+            return _mapper.Map<UserPayslipDTO>(userPayslip);
+        }
+
         public async Task<IEnumerable<UserPayslipWagesDTO>> GetUserWages(Guid userId)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);

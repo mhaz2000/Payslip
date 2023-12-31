@@ -14,6 +14,7 @@ namespace Payslip.Application.Base
                 .ForMember(c=> c.User, opt => opt.MapFrom<UserResolver>());
 
             CreateMap<User, UserDTO>();
+            CreateMap<UserPayslip, UserPayslipDTO>();
         }
     }
 

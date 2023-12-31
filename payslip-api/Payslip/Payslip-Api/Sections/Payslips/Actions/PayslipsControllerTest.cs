@@ -187,5 +187,21 @@ namespace Payslip_Api.Sections.Payslips.Actions
         }
 
         #endregion
+
+        #region Get User Payslip
+
+        [Fact]
+        public void Should_return_user_payslip()
+        {
+            var response = _payslipsController.GetUserPayslip(1,1402);
+            var result = (OkObjectResult)response;
+
+            response.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().NotBeNull();
+            result.Value.Should().BeAssignableTo<UserPayslipDTO>();
+        }
+
+        #endregion
     }
 }
