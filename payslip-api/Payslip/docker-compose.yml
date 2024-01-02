@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  payslip.api:
+    image: ${DOCKER_REGISTRY-}payslipapi
+    build:
+      context: .
+      dockerfile: Payslip.API/Dockerfile
