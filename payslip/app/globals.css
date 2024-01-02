@@ -112,3 +112,13 @@ input::-webkit-inner-spin-button {
   direction: rtl;
   font-family: IranSans;
 }
+
+.text-2xs{
+  font-size: 0.6rem;
+  line-height: .75rem;
+}
+
+.text-3xs{
+  font-size: 0.5rem;
+  line-height: .6rem;
+}

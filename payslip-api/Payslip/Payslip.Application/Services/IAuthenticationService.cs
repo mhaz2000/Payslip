@@ -8,5 +8,6 @@ namespace Payslip.Application.Services
     {
         Task<UserLoginDTO> Login(LoginCommand loginCommand, JwtIssuerOptionsModel jwtIssuerOptions);
         Task ChangePassword(Guid userId, ChangePasswordCommand command);
+        Task ChangePasswordByAdmin(Guid userId, ChangePasswordByAdminCommand command);
     }
 }

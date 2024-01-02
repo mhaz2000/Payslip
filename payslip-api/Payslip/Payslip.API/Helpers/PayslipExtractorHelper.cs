@@ -1,6 +1,9 @@
-﻿using OfficeOpenXml;
+﻿using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using OfficeOpenXml;
 using Payslip.API.Base;
 using Payslip.Application.Commands;
+using Payslip.Infrastructure.Migrations;
+using System.Text.RegularExpressions;
 
 namespace Payslip.API.Helpers
 {
@@ -66,12 +69,16 @@ namespace Payslip.API.Helpers
 
         private PayslipCommand GeneratePayslip(ExcelWorksheet worksheet, int index)
         {
+            string pattern = @"\[\d+\]";
+
             var lastName = worksheet.Cells[index + 2, 3].Value?.ToString()!.Replace("نـام خانوادگـي : ", "");
             var firstName = worksheet.Cells[index + 2, 6].Value?.ToString()!.Replace("نـام : ", "");
             var cardNumber = worksheet.Cells[index + 3, 1].Value?.ToString()!.Replace("شـماره كارت : ", "");
-            var contractType = worksheet.Cells[index + 4, 1].Value?.ToString()!.Replace("نـوع استخـدام : ", "");
-            var location = worksheet.Cells[index + 4, 6].Value?.ToString()!;
-            var position = worksheet.Cells[index + 5, 6].Value?.ToString()!;
+
+            var contractType = Regex.Replace(worksheet.Cells[index + 4, 1].Value?.ToString()!.Replace("نـوع استخـدام : ", "")!, pattern, "");
+            var location = Regex.Replace(worksheet.Cells[index + 4, 6].Value?.ToString()!, pattern, "");
+            var position = Regex.Replace(worksheet.Cells[index + 5, 6].Value?.ToString()!, pattern, "");
+
 
             int counter = 0;
             Dictionary<int, string> salaryAndBenefits = new Dictionary<int, string>();
