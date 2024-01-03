@@ -19,7 +19,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="font-IranSans gradient-bg h-screen dir-right">
+      <body className="font-IranSansFaNumbers gradient-bg h-screen dir-right">
         <ToastContainer
           rtl
           limit={3}

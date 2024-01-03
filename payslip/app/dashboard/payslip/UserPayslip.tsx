@@ -88,11 +88,11 @@ const UserPayslip = ({
         <div ref={ref} className={`text-black min-w-full px-5 mx-auto`}>
           <div className="pt-2">
             <div className="flex flex-row justify-around items-center">
-              <div className="w-1/3 flex justify-center">
+              <div className="w-1/3 flex justify-start">
                 <Image src="/logo.png" alt="Logo" width={100} height={50} />
               </div>
               <div className="w-1/3">
-                <h2 className="lg:text-sm text-xs text-center pt-5">
+                <h2 className="lg:text-base text-sm text-center pt-5 font-IranSansBold">
                   شرکت پترو آرمان صنعت دانیال
                 </h2>
                 <h4 className="text-2xs lg:text-xs text-center py-3">
@@ -102,13 +102,13 @@ const UserPayslip = ({
               </div>
               <div className="w-1/3"></div>
             </div>
-            <div className="text-2xs lg:text-sm flex flex-row justify-around my-2">
+            <div className="text-2xs lg:text-sm flex flex-row justify-between my-2">
               <div className="flex flex-col w-1/3">
-                <div className="py-2 mx-auto">
+                <div className="py-2">
                   <span className="font-bold">نام: </span>
                   {payslip?.firstName}
                 </div>
-                <div className="mx-auto">
+                <div className="">
                   <span className="font-bold">نوع استخدام: </span>
                   {payslip?.contractType}
                 </div>
@@ -123,12 +123,12 @@ const UserPayslip = ({
                   {payslip?.location}
                 </div>
               </div>
-              <div className="flex flex-col w-1/3">
-                <div className="py-2 mx-auto">
+              <div className="flex flex-col w-1/3 text-left items-end">
+                <div className="py-2">
                   <span className="font-bold">شماره کارت: </span>
                   {payslip?.cardNumber}
                 </div>
-                <div className="mx-auto">
+                <div className="">
                   <span className="font-bold">سمت: </span>
                   {payslip?.position}
                 </div>

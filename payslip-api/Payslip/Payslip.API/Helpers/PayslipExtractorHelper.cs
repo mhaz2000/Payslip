@@ -152,7 +152,8 @@ namespace Payslip.API.Helpers
                 (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true))
             {
                 descriptions.Add(counter + 1, worksheet.Cells[index + 8 + counter, 7].Value?.ToString()!);
-                descriptionsAmount.Add(counter + 1, worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!);
+                descriptionsAmount.Add(
+                    counter + 1, ulong.TryParse(worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!, out ulong descriptionAmount) ? descriptionAmount.ToString("n0") : "0");
                 counter++;
             }
 
@@ -162,7 +163,8 @@ namespace Payslip.API.Helpers
                 (!worksheet.Cells[index + 8 + counter, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true))
             {
                 descriptions.Add(counter + 1, worksheet.Cells[index + 8 + counter, 7].Value?.ToString()!);
-                descriptionsAmount.Add(counter + 1, worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!);
+                descriptionsAmount.Add(
+                    counter + 1, ulong.TryParse(worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!, out ulong descriptionAmount) ? descriptionAmount.ToString("n0") : "0");
             }
 
             var totalSalaryAndBenefits = ulong.TryParse(worksheet.Cells[index + 20, 4].Value?.ToString()!, out ulong totalSalaryAndBenefit)

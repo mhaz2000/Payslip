@@ -44,6 +44,11 @@ body {
   src: url(../public/fonts/Iransans-Bold.ttf);
 }
 
+@font-face {
+  font-family: IranSansFaNumbers;
+  src: url(../public/fonts/IRANSansWebFaNum.ttf);
+}
+
 .dir-right {
   direction: rtl;
 }
@@ -110,7 +115,7 @@ input::-webkit-inner-spin-button {
 
 .print-payslip{
   direction: rtl;
-  font-family: IranSans;
+  font-family: IranSansFaNumbers;
 }
 
 .text-2xs{

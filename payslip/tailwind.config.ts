@@ -10,6 +10,7 @@ const config: Config = {
     fontFamily: {
       IranSans: ["IranSans"],
       IranSansBold: ["IranSansBold"],
+      IranSansFaNumbers: ["IranSansFaNumbers"]
     },
     extend: {
       backgroundImage: {
