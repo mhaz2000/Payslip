@@ -13,6 +13,8 @@ interface TableRow {
   salaryAndBenefitDuration: string;
   deductionTitle: string;
   deductionAmount: string;
+  descriptionTitle: string;
+  descriptionAmount: string;
 }
 
 const UserPayslip = ({
@@ -64,6 +66,14 @@ const UserPayslip = ({
             res.data.deductionsAmount && res.data.deductionsAmount[i]
               ? res.data.deductionsAmount[i]
               : "",
+          descriptionTitle:
+            res.data.descriptions && res.data.descriptions[i]
+              ? res.data.descriptions[i]
+              : "",
+          descriptionAmount:
+            res.data.descriptionsAmount && res.data.descriptionsAmount[i]
+              ? res.data.descriptionsAmount[i]
+              : "",
         });
       }
       setPayslipItems(items);
@@ -75,7 +85,7 @@ const UserPayslip = ({
   return (
     <>
       <div className="hidden">
-        <div ref={ref} className={`text-black min-w-full p-10 mx-auto`}>
+        <div ref={ref} className={`text-black min-w-full px-5 mx-auto`}>
           <div className="pt-2">
             <div className="flex flex-row justify-around items-center">
               <div className="w-1/3 flex justify-center">
@@ -168,24 +178,28 @@ const UserPayslip = ({
               </thead>
               <tbody className="bg-transparent text-black">
                 {payslipItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="border-collapse border-x border-black px-3 my-2 text-2xs lg:text-xs">
+                  <tr className="h-7" key={index}>
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
                       {item.salaryAndBenefitTitle}
                     </td>
-                    <td className="px-3 my-2 dir-left flex justify-end text-2xs lg:text-xs">
+                    <td className="px-3 my-1 dir-left flex justify-end text-2xs lg:text-xs">
                       {item.salaryAndBenefitDuration}
                     </td>
-                    <td className="border-collapse border-x border-black px-3 my-2 text-2xs lg:text-xs">
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
                       {item.salaryAndBenefitAmount}
                     </td>
-                    <td className="border-collapse border-x border-black px-3 my-2 text-2xs lg:text-xs">
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
                       {item.deductionTitle}
                     </td>
-                    <td className="border-collapse border-x border-black px-3 my-2 text-2xs lg:text-xs">
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
                       {item.deductionAmount}
                     </td>
-                    <td className="pr-7 my-2 text-2xs lg:text-xs"></td>
-                    <td className="pr-7 my-2 text-2xs lg:text-xs"></td>
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
+                      {item.descriptionTitle}
+                    </td>
+                    <td className="border-collapse border-x border-black px-3 my-1 text-2xs lg:text-xs">
+                      {item.descriptionAmount}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -202,7 +216,9 @@ const UserPayslip = ({
                     {payslip?.totalDeductions}
                   </td>
                   <td className="px-3 my-2 text-xss">خالص پرداختی</td>
-                  <td className="border-collapse border-x border-black px-3 my-2 text-xss">{payslip?.netPayable}</td>
+                  <td className="border-collapse border-x border-black px-3 my-2 text-xss">
+                    {payslip?.netPayable}
+                  </td>
                 </tr>
               </tfoot>
             </table>
@@ -211,7 +227,6 @@ const UserPayslip = ({
       </div>
 
       <div
-        // ref={ref}
         className={`text-black min-w-full p-10 mx-auto ${
           payslip ? "" : "hidden"
         }`}
@@ -294,19 +309,19 @@ const UserPayslip = ({
               {payslipItems.map((item, index) => (
                 <tr
                   key={index}
-                  className={`bg-slate-200 ${
+                  className={`bg-slate-200 h-8 ${
                     index % 2 === 1 ? "bg-teal-50" : ""
                   }`}
                 >
-                  <td className="pr-7 my-2">{item.salaryAndBenefitTitle}</td>
-                  <td className="pr-7 my-2 dir-left flex justify-end">
+                  <td className="pr-7 my-1">{item.salaryAndBenefitTitle}</td>
+                  <td className="pr-7 my-1 dir-left flex justify-end">
                     {item.salaryAndBenefitDuration}
                   </td>
-                  <td className="pr-7 my-2">{item.salaryAndBenefitAmount}</td>
-                  <td className="pr-7 my-2">{item.deductionTitle}</td>
-                  <td className="pr-7 my-2">{item.deductionAmount}</td>
-                  <td className="pr-7 my-2"></td>
-                  <td className="pr-7 my-2"></td>
+                  <td className="pr-7 my-1">{item.salaryAndBenefitAmount}</td>
+                  <td className="pr-7 my-1">{item.deductionTitle}</td>
+                  <td className="pr-7 my-1">{item.deductionAmount}</td>
+                  <td className="pr-7 my-1">{item.descriptionTitle}</td>
+                  <td className="pr-7 my-1">{item.descriptionAmount}</td>
                 </tr>
               ))}
             </tbody>

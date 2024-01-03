@@ -172,7 +172,6 @@ namespace Payslip_Api.Sections.Payslips.Services
         private static List<PayslipCommand> GeneratePayslipCommandData(int count)
         {
             var faker = new Faker<PayslipCommand>()
-                .RuleFor(c => c.Bank, f => f.Name.FindName())
                 .RuleFor(c => c.FirstName, f => f.Name.FirstName())
                 .RuleFor(c => c.LastName, f => f.Name.LastName());
 

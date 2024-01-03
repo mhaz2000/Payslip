@@ -29,6 +29,8 @@ namespace Payslip.Core.Entities
         public IDictionary<int, string>? SalaryAndBenefitsAmount { get; set; }
         public IDictionary<int, string>? Deductions { get; set; }
         public IDictionary<int, string>? DeductionsAmount { get; set; }
+        public IDictionary<int, string>? Descriptions { get; set; }
+        public IDictionary<int, string>? DescriptionsAmount { get; set; }
 
         public Guid FileId { get; set; }
     }

@@ -2,13 +2,16 @@
 
 import "react-toastify/ReactToastify.css";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { displayError } from "@/lib/toastDisplay";
 
-
 const LoginForm = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  if (pathname.includes("login")) router.push("/dashboard");
+
   const [usernameEmpty, setUsernameEmpty] = useState(false);
   const [passwordEmpty, setPasswordEmpty] = useState(false);
 
