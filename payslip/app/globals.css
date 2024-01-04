@@ -127,3 +127,7 @@ input::-webkit-inner-spin-button {
   font-size: 0.5rem;
   line-height: .6rem;
 }
+
+.toast-style{
+  font-family: IranSansFaNumbers;
+}
