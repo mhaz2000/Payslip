@@ -58,6 +58,20 @@ namespace Payslip.Infrastructure.Data
                 .HasConversion(
                     data => data.ToJson(),
                     data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
+
+            builder.Entity<UserPayslip>()
+                .Property(c => c.Descriptions)
+                .HasColumnType("nvarchar(max)")
+                .HasConversion(
+                    data => data.ToJson(),
+                    data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
+
+            builder.Entity<UserPayslip>()
+                .Property(c => c.DescriptionsAmount)
+                .HasColumnType("nvarchar(max)")
+                .HasConversion(
+                    data => data.ToJson(),
+                    data => JsonConvert.DeserializeObject<IDictionary<int, string>>(data)!);
         }
     }
 }

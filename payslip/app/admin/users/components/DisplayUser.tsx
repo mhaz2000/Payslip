@@ -5,6 +5,7 @@ import { displayError, displaySuccess } from "@/lib/toastDisplay";
 import { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import ChangeUserPassword from "./ChangeUserPassword";
 
 interface DisplayUserComponentProps {
   handleCount: (count: number) => void;
@@ -32,6 +33,17 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
   const axiosAuth = useAxiosAuth();
 
   const removeUser = async (userId: string) => {
+    try {
+      await axiosAuth.delete(`/api/users/${userId}`);
+
+      displaySuccess("کاربر با موفقیت حذف شد.");
+      setRefresh((prev) => (prev = !prev));
+    } catch (error: any) {
+      displayError(error.data.message);
+    }
+  };
+
+  const changePassword = async (userId: string) => {
     try {
       await axiosAuth.delete(`/api/users/${userId}`);
 
@@ -93,6 +105,7 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
               <td className="px-6 py-4 whitespace-nowrap">{user.cardNumber}</td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="flex flex-row gap-2">
+                  <ChangeUserPassword userId={user.id} />
                   <button
                     className="btn-style w-24 bg-black border-red-500 text-red-500 hover:bg-red-500"
                     onClick={() => removeUser(user.id)}

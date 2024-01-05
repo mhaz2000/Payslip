@@ -5,6 +5,7 @@ import TablePagination from "../../components/TablePagination";
 import UserList from "./components/UserList";
 import UserSearch from "./components/UserSearch";
 import CreateUser from "./components/CreateUser";
+import UploadUserExcel from "./components/UploadUserExcel";
 
 const Users = () => {
   const [current, setCurrent] = useState(1);
@@ -31,8 +32,9 @@ const Users = () => {
 
   return (
     <div className="pt-5">
-      <div className="flex flex-row w-full px-10">
+      <div className="flex flex-col items-center justify-center gap-2 md:flex-row w-full px-10">
         <CreateUser handleCreateUser={handleCreateUser} />
+        <UploadUserExcel handleCreateUser={handleCreateUser} />
         <UserSearch handleSearch={handleSearch} />
       </div>
       <UserList

@@ -155,5 +155,54 @@ namespace Payslip_Api.Sections.Authentications.Actions
         }
 
         #endregion
+
+        #region change password by admin
+
+        [Fact]
+        public void Should_Raise_Exception_When_Inputs_Are_Empty()
+        {
+            var command = new ChangePasswordByAdminCommand();
+
+            var act = async () => await _authenticationController.ChangePasswordByAdmin(command);
+
+            act.Should().ThrowAsync<ValidationException>().WithMessage("شناسه کاربر الزامی است.\nرمز عبور جدید اجباری است.");
+        }
+
+        [Theory]
+        [InlineData("   ")]
+        [InlineData("  sdfsf ")]
+        [InlineData(" 156 ")]
+        [InlineData("123 5")]
+        [InlineData("1f sg3")]
+        public void Should_Raise_Exception_When_Password_Policy_Is_Not_Matched_Invalid_Char(string password)
+        {
+            var command = new ChangePasswordByAdminCommand()
+            {
+                UserId = Guid.NewGuid(),
+                NewPassword = password
+            };
+
+            var act = async () => await _authenticationController.ChangePasswordByAdmin(command);
+
+            act.Should().ThrowAsync<ValidationException>().WithMessage("رمز عبور نمی‌تواند شامل کاراکتر فاصله باشد.");
+        }
+
+        [Theory]
+        [InlineData("123456")]
+        [InlineData("123456d")]
+        [InlineData("d4")]
+        public void Should_Raise_Exception_When_Password_Policy_Is_Not_Matched_Invalid_Length(string password)
+        {
+            var command = new ChangePasswordByAdminCommand()
+            {
+                UserId = Guid.NewGuid(),
+                NewPassword = password
+            };
+
+            var act = async () => await _authenticationController.ChangePasswordByAdmin(command);
+
+            act.Should().ThrowAsync<ValidationException>().WithMessage("رمز عبور باید حداقل شامل 8 کاراکتر باشد.");
+        }
+        #endregion
     }
 }

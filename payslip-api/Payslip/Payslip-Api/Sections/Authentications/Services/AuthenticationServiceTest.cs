@@ -175,5 +175,29 @@ namespace Payslip_Api.Sections.Authentications.Services
             A.CallTo(() => _unitOfWork.CommitAsync()).MustHaveHappenedOnceExactly();
         }
         #endregion
+
+        #region Change password by admin
+
+        [Fact]
+        public async void Should_Raise_Error_When_User_Cannot_Be_Found()
+        {
+            A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(A<Guid>._)).Returns(null);
+            var act = async () => await _authenticationService.ChangePasswordByAdmin(Guid.NewGuid(), new ChangePasswordByAdminCommand());
+
+            await act.Should().ThrowAsync<ManagedException>().WithMessage("کاربر مورد نظر یافت نشد.");
+        }
+
+        [Fact]
+        public async void Should_Change_User_Password()
+        {
+            A.CallTo(() => _unitOfWork.UserRepository.GetByIdAsync(A<Guid>._)).Returns(new User());
+
+            await _authenticationService.ChangePasswordByAdmin(Guid.NewGuid(), new ChangePasswordByAdminCommand());
+
+            A.CallTo(() => _userManager.PasswordHasher.HashPassword(A<User>._, A<string>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _unitOfWork.CommitAsync()).MustHaveHappenedOnceExactly();
+        }
+
+        #endregion
     }
 }

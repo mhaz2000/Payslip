@@ -17,4 +17,6 @@ interface UserPayslip {
   salaryAndBenefitsAmount?: { [key: number]: string } | null;
   deductions?: { [key: number]: string } | null;
   deductionsAmount?: { [key: number]: string } | null;
+  descriptions?: { [key: number]: string } | null;
+  descriptionsAmount?: { [key: number]: string } | null;
 }

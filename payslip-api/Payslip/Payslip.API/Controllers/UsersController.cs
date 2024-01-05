@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Payslip.API.Base;
+using Payslip.API.Helpers;
 using Payslip.Application.Commands;
 using Payslip.Application.Services;
+using Payslip.Core.Enums;
 
 namespace Payslip.API.Controllers
 {
@@ -12,10 +14,12 @@ namespace Payslip.API.Controllers
     public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IExcelHelpler _userExctractor;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IExcelHelpler excelHelpler)
         {
             _userService = userService;
+            _userExctractor = excelHelpler;
         }
 
         public async Task<IActionResult> CreateUser(UserCreateCommand command)
@@ -47,6 +51,36 @@ namespace Payslip.API.Controllers
         public async Task<IActionResult> Delelte(Guid userId)
         {
             await _userService.RemoveUser(userId);
+
+            return Ok();
+        }
+
+        [HttpPost("UploadUsersFile")]
+        public async Task<IActionResult> ImportUsers([FromQuery] ImportUserExcelCommmand dto)
+        {
+            IEnumerable<UserModel> users;
+            using (var stream = new MemoryStream())
+            {
+                await dto.File.CopyToAsync(stream);
+                try
+                {
+                    users = _userExctractor.ExtractUsers(stream).ToList();
+                }
+                catch (Exception)
+                {
+                    return BadRequest("قالب فایل بارگذاری شده صحیح نیست.");
+                }
+            }
+
+            var command = users.Select(user => new UserCreateCommand()
+            {
+                CardNumber = user.CardNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                NationalCode = user.NationalCode,
+            });
+
+            await _userService.CreateUsers(command);
 
             return Ok();
         }

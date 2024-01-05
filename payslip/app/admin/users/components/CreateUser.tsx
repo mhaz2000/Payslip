@@ -20,7 +20,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ handleCreateUser }) => {
   return (
     <>
       <button
-        className="btn-style w-36 ml-2"
+        className="btn-style w-64 ml-2"
         onClick={() => setShowModal(true)}
       >
         کاربر جدید

@@ -69,6 +69,23 @@ namespace Payslip_Api.Sections.Payslips.Services
 
         }
 
+        [Fact]
+        public async Task Should_Throw_Exception_When_Wage_Is_Duplicated()
+        {
+            //Arrange
+            var payslipCommands = GeneratePayslipCommandData(5);
+
+            //Act
+            A.CallTo(() => _unitOfWork.PayslipRepository.Any(A<Expression<Func<UserPayslip,bool>>>._)).Returns(true);
+            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 5, Guid.NewGuid());
+
+            //Assert
+            await act.Should().ThrowExactlyAsync<ManagedException>().WithMessage("فایل فیش حقوقی برای دوره مالی وارد شده، قبلا ثبت شده است.");
+
+            A.CallTo(() => _unitOfWork.PayslipRepository.AddRangeAsync(A<IEnumerable<UserPayslip>>._)).MustNotHaveHappened();
+            A.CallTo(() => _unitOfWork.CommitAsync()).MustNotHaveHappened();
+        }
+
         #endregion
 
         #region Get User payslips Wages
@@ -172,7 +189,6 @@ namespace Payslip_Api.Sections.Payslips.Services
         private static List<PayslipCommand> GeneratePayslipCommandData(int count)
         {
             var faker = new Faker<PayslipCommand>()
-                .RuleFor(c => c.Bank, f => f.Name.FindName())
                 .RuleFor(c => c.FirstName, f => f.Name.FirstName())
                 .RuleFor(c => c.LastName, f => f.Name.LastName());
 
