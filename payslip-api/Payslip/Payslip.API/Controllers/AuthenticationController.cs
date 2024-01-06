@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Payslip.API.Base;
 using Payslip.Application.Base;
 using Payslip.Application.Commands;
@@ -20,10 +22,13 @@ namespace Payslip.API.Controllers
 
             var config = new ConfigurationBuilder()
            .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appSettings.json")
-           .Build();
+            .AddJsonFile("appsettings.json")
+            .Build();
 
-            _jwtIssuerOptions = config.Get<AppSettingsModel>().JwtIssuerOptions;
+            AppSettingsModel appSettingsModel = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONFIG")) ? config.Get<AppSettingsModel>() :
+                JsonConvert.DeserializeObject<AppSettingsModel>(Environment.GetEnvironmentVariable("CONFIG")!)!;
+
+            _jwtIssuerOptions = appSettingsModel.JwtIssuerOptions;
 
         }
 
