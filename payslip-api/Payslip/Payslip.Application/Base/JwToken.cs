@@ -24,4 +24,9 @@ namespace Payslip.Application.Base
             () => Task.FromResult(Guid.NewGuid().ToString());
         public SigningCredentials SigningCredentials { get; set; }
     }
+
+    public class ConnectionStringsModel
+    {
+        public string Main { get; set; }
+    }
 }

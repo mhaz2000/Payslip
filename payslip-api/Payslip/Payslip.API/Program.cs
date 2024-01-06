@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Payslip.API;
 using Payslip.API.Base;
 using Payslip.API.Extensions;
@@ -14,11 +15,24 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseKestrel(options =>
+{
+    options.ListenAnyIP(80); // Use port 80 for HTTP
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Main")));
+var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+AppSettingsModel appSettingsModel = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONFIG")) ? config.Get<AppSettingsModel>() :
+    JsonConvert.DeserializeObject<AppSettingsModel>(Environment.GetEnvironmentVariable("CONFIG")!)!;
+
+builder.Services.AddDbContext<DataContext>(opt => opt.UseSqlServer(appSettingsModel.ConnectionStrings.Main));
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
@@ -26,13 +40,6 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-
-var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appSettings.json")
-                .Build();
-
-AppSettingsModel appSettingsModel = config.Get<AppSettingsModel>();
 var jwtIssuerOptions = appSettingsModel.JwtIssuerOptions;
 
 SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtIssuerOptions.SecretKey));
@@ -123,8 +130,6 @@ app.UseCors(c =>
     c.AllowAnyMethod();
     c.AllowAnyOrigin();
 });
-
-
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 using Payslip.Infrastructure.Data;
+using Newtonsoft.Json;
+using Payslip.Application.Base;
 
 namespace Payslip.API.Extensions
 {
@@ -14,8 +16,11 @@ namespace Payslip.API.Extensions
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-            var connectionString = configuration.GetConnectionString("Main");
 
+            AppSettingsModel appSettingsModel = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONFIG")) ? configuration.Get<AppSettingsModel>() :
+                JsonConvert.DeserializeObject<AppSettingsModel>(Environment.GetEnvironmentVariable("CONFIG")!)!;
+
+            var connectionString = appSettingsModel.ConnectionStrings.Main;
 
             optionsBuilder.UseSqlServer(connectionString);
 
