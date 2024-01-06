@@ -17,23 +17,31 @@ const handler = NextAuth({
       },
       async authorize(credentials, req)
       {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
-          method: "POST",
-          body: JSON.stringify({
-            username: credentials?.username,
-            password: credentials?.password,
-          }),
-          headers: { "Content-Type": "application/json" },
-        });
 
-        const data = await res.json();
-
-        if (res.ok && data)
+        try
         {
-          return data;
-        }
+          const res = await fetch(`${process.env.API_URL}/api/authentication/login`, {
+            method: "POST",
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
 
-        return null;
+          const data = await res.json();
+
+          if (res.ok && data)
+          {
+            return data;
+          }
+
+          return null;
+        } catch (error)
+        {
+          console.log(error)
+          return null
+        }
       },
     }),
   ],

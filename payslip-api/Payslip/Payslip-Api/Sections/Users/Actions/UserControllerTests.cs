@@ -2,15 +2,19 @@
 using FakeItEasy;
 using FluentAssertions;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Payslip.API.Base;
 using Payslip.API.Controllers;
+using Payslip.API.Helpers;
 using Payslip.Application.Commands;
 using Payslip.Application.DTOs;
 using Payslip.Application.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Payslip_Api.Sections.Users.Actions
@@ -22,8 +26,9 @@ namespace Payslip_Api.Sections.Users.Actions
         public UserControllerTests()
         {
             _userService = A.Fake<IUserService>();
-            _userController = new UsersController(_userService);
+            _userController = new UsersController(_userService, A.Fake<IExcelHelpler>());
         }
+
         #region Get Users
         [Theory]
         [InlineData(10)]
@@ -157,6 +162,27 @@ namespace Payslip_Api.Sections.Users.Actions
 
             response.Should().NotBeNull();
             response.Should().BeAssignableTo<OkResult>();
+        }
+
+        #endregion
+
+        #region Import Users Excel
+
+        [Fact]
+        public async Task Should_Import_User_ExcelAsync()
+        {
+            var fakeDTO = new ImportUserExcelCommmand()
+            {
+                File = A.Fake<IFormFile>(),
+            };
+
+            //Act
+            var response = await _userController.ImportUsers(fakeDTO);
+            var result = (OkResult)response;
+
+            response.Should().NotBeNull();
+            response.Should().BeOfType<OkResult>();
+            result.StatusCode.Should().Be(200);
         }
 
         #endregion

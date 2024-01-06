@@ -20,7 +20,7 @@ namespace Payslip.API.Helpers
                 worksheet.TrimLastEmptyRows();
                 var rowCount = worksheet.Dimension.Rows;
 
-                for (int i = 2; i < rowCount; i++)
+                for (int i = 2; i <= rowCount; i++)
                 {
                     yield return new UserModel()
                     {
@@ -46,7 +46,7 @@ namespace Payslip.API.Helpers
                 int? counter = FindNextRow(worksheet, 1, rowCount);
                 while (counter is not null)
                 {
-                    var payslipCommand = GeneratePayslip(worksheet, counter.Value);
+                    var payslipCommand = GeneratePayslip(worksheet, counter.Value, rowCount);
                     yield return payslipCommand;
 
                     counter = FindNextRow(worksheet, counter.Value + 1, rowCount);
@@ -67,7 +67,7 @@ namespace Payslip.API.Helpers
             return null;
         }
 
-        private PayslipCommand GeneratePayslip(ExcelWorksheet worksheet, int index)
+        private PayslipCommand GeneratePayslip(ExcelWorksheet worksheet, int index, int rowCount)
         {
             string pattern = @"\[\d+\]";
 
@@ -167,10 +167,14 @@ namespace Payslip.API.Helpers
                     counter + 1, ulong.TryParse(worksheet.Cells[index + 8 + counter, 8].Value?.ToString()!, out ulong descriptionAmount) ? descriptionAmount.ToString("n0") : "0");
             }
 
-            var totalSalaryAndBenefits = ulong.TryParse(worksheet.Cells[index + 20, 4].Value?.ToString()!, out ulong totalSalaryAndBenefit)
+            int sumRow = index + 8;
+            while (sumRow < rowCount && (!worksheet.Cells[sumRow, 1].Value?.ToString()!.Contains("جمـع كـل حقـوق و مـزايا") ?? true))
+                sumRow++;
+
+            var totalSalaryAndBenefits = ulong.TryParse(worksheet.Cells[sumRow, 4].Value?.ToString()!, out ulong totalSalaryAndBenefit)
                 ? totalSalaryAndBenefit.ToString("n0") : "0";
-            var totalDeductions = ulong.TryParse(worksheet.Cells[index + 20, 6].Value?.ToString()!, out ulong totalDeduction) ? totalDeduction.ToString("n0") : "0";
-            var netPayable = ulong.TryParse(worksheet.Cells[index + 20, 8].Value?.ToString()!, out ulong parsedNetPayable) ? parsedNetPayable.ToString("n0") : "0";
+            var totalDeductions = ulong.TryParse(worksheet.Cells[sumRow, 6].Value?.ToString()!, out ulong totalDeduction) ? totalDeduction.ToString("n0") : "0";
+            var netPayable = ulong.TryParse(worksheet.Cells[sumRow, 8].Value?.ToString()!, out ulong parsedNetPayable) ? parsedNetPayable.ToString("n0") : "0";
 
             return new PayslipCommand()
             {
@@ -198,7 +202,7 @@ namespace Payslip.API.Helpers
             if (value is null)
                 return false;
 
-            if (value.Contains("اضافه كار") || value.Contains("ناهار") || value.Contains("اضافه كار") || value.Contains("جمعه کار") || value.Contains("تعطيل کار") || value.Contains("دستمزد"))
+            if (value.Contains("اضافه کار") || value.Contains("ناهار") || value.Contains("اضافه كار") || value.Contains("جمعه کار") || value.Contains("تعطيل کار") || value.Contains("دستمزد"))
                 return true;
 
             return false;

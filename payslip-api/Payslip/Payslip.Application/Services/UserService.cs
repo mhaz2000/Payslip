@@ -37,6 +37,33 @@ namespace Payslip.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
+        public async Task CreateUsers(IEnumerable<UserCreateCommand> users)
+        {
+            List<string> errors = new List<string>();
+            foreach (var user in users)
+            {
+                var checkNattionalCodeDuplication = await _unitOfWork.UserRepository.AnyAsync(c => c.IsActive && c.NationalCode == user.NationalCode);
+                if (checkNattionalCodeDuplication)
+                    errors.Add($"کد ملی {user.NationalCode} تکراری است.");
+
+                var checkCardNumberDuplication = await _unitOfWork.UserRepository.AnyAsync(c => c.IsActive && c.CardNumber == user.CardNumber);
+                if (checkCardNumberDuplication)
+                    errors.Add($"شماره کارت {user.CardNumber} تکراری است.");
+            }
+
+            if (errors.Any())
+                throw new ManagedException(string.Join("\n", errors));
+
+            foreach (var user in users)
+            {
+                var newUser = new User(user.NationalCode, user.LastName, user.FirstName, user.NationalCode, user.CardNumber);
+                await _userManager.CreateAsync(newUser, user.NationalCode);
+                await _userManager.AddToRoleAsync(newUser, "User");
+            }
+
+            await _unitOfWork.CommitAsync();
+        }
+
         public (IEnumerable<UserDTO> Users, int Total) GetUsers(int skip, string search)
         {
             var users = _unitOfWork.UserRepository.Where(c => !string.IsNullOrEmpty(c.NationalCode))

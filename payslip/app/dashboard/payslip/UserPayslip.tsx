@@ -139,19 +139,19 @@ const UserPayslip = ({
                 <tr>
                   <th
                     scope="col"
-                    className="border-collapse border-l border-black px-3 py-3 text-right tracking-wider"
+                    className="border-collapse border-l border-black px-2 py-1 text-right tracking-wider"
                   >
                     حقوق و مزایا
                   </th>
                   <th
                     scope="col"
-                    className="border-collapse border-x border-black px-3 py-3 text-right tracking-wider"
+                    className="border-collapse border-x border-black px-2 py-1 text-right tracking-wider"
                   >
                     دقیقه:ساعت:روز
                   </th>
                   <th
                     scope="col"
-                    className="border-collapse border-x border-black px-3 py-3 text-right tracking-wider"
+                    className="border-collapse border-x border-black px-2 py-1 text-right tracking-wider"
                   >
                     مبلغ
                   </th>
@@ -163,14 +163,14 @@ const UserPayslip = ({
                   </th>
                   <th
                     scope="col"
-                    className="border-collapse border-x border-black px-3 py-3 text-right tracking-wider"
+                    className="border-collapse border-x border-black px-2 py-1 text-right tracking-wider"
                   >
                     مبلغ
                   </th>
                   <th
                     colSpan={2}
                     scope="col"
-                    className="border-collapse border-x border-black px-3 py-3 text-right tracking-wider"
+                    className="border-collapse border-x border-black px-2 py-1 text-right tracking-wider"
                   >
                     توضیحات
                   </th>

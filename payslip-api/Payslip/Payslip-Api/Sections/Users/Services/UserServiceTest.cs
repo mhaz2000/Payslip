@@ -57,7 +57,7 @@ namespace Payslip_Api.Sections.Users.Services
 
         #endregion
 
-        #region Create Usr
+        #region Create User
 
         [Fact]
         public async void Create_User_Should_Raise_Error_When_NationalCode_is_repetitive()

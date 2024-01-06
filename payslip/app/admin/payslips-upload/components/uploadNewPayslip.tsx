@@ -48,7 +48,7 @@ const UploadNewPayslip: React.FC<UploadNewPayslipProps> = ({
                   </button>
                 </div>
                 {/*body*/}
-                <UploadPayslipsForm closeModal={closeModal} handleCreatePayslip={handleCreatePayslip} />
+                <UploadPayslipsForm closeModal={closeModal} handleAction={handleCreatePayslip} />
                 {/*footer*/}
               </div>
             </div>

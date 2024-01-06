@@ -3,18 +3,18 @@
 import { useState } from "react";
 import DropDown from "../../../components/DropDown";
 import { Month, MonthMapper } from "@/app/Enums/Month";
-import Uploader from "./Uploader";
+import Uploader from "../../../components/Uploader";
 import { displayError, displaySuccess } from "@/lib/toastDisplay";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 interface UploadPayslipFormProps {
   closeModal: () => void;
-  handleCreatePayslip: () => void;
+  handleAction: () => void;
 }
 
 const UploadPayslipsForm: React.FC<UploadPayslipFormProps> = ({
   closeModal,
-  handleCreatePayslip,
+  handleAction,
 }) => {
   let years = [];
   let months = [
@@ -68,8 +68,9 @@ const UploadPayslipsForm: React.FC<UploadPayslipFormProps> = ({
 
       displaySuccess("فایل با موفقیت بارگذاری شد.");
       closeModal();
-      handleCreatePayslip();
+      handleAction();
     } catch (error: any) {
+
       displayError(error.data.message);
     }
   };

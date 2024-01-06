@@ -41,6 +41,7 @@ namespace Payslip.API.Base
             }
             catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 await ConfigureResponse(context, HttpStatusCode.InternalServerError, "متاسفانه خطای سیستمی رخ داده است، در صورت لزوم با پشتیبانی تماس حاصل نمایید");
             }
         }

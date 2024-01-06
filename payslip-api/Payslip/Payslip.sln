@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payslip.Tests", "Payslip-Api\Payslip.Tests.csproj", "{E013B32B-5175-4F37-A69B-F7FDABF8C281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payslip.Tests", "Payslip-Api\Payslip.Tests.csproj", "{E013B32B-5175-4F37-A69B-F7FDABF8C281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payslip.API", "Payslip.API\Payslip.API.csproj", "{2285D02B-7DDD-4676-A143-00063992214B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payslip.API", "Payslip.API\Payslip.API.csproj", "{2285D02B-7DDD-4676-A143-00063992214B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payslip.Infrastructure", "Payslip.Infrastructure\Payslip.Infrastructure.csproj", "{2905D591-5AF6-4FBB-9F11-D96CD571E9B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payslip.Infrastructure", "Payslip.Infrastructure\Payslip.Infrastructure.csproj", "{2905D591-5AF6-4FBB-9F11-D96CD571E9B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payslip.Core", "Payslip.Core\Payslip.Core.csproj", "{6E265FAD-ABA4-4270-91CA-15AB11467056}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payslip.Core", "Payslip.Core\Payslip.Core.csproj", "{6E265FAD-ABA4-4270-91CA-15AB11467056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payslip.Application", "Payslip.Application\Payslip.Application.csproj", "{F0A35D3B-19AD-4459-8B28-16F42E02EB11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payslip.Application", "Payslip.Application\Payslip.Application.csproj", "{F0A35D3B-19AD-4459-8B28-16F42E02EB11}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{444C6992-904B-419F-9EDC-9470F950E7FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F0A35D3B-19AD-4459-8B28-16F42E02EB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0A35D3B-19AD-4459-8B28-16F42E02EB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0A35D3B-19AD-4459-8B28-16F42E02EB11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{444C6992-904B-419F-9EDC-9470F950E7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{444C6992-904B-419F-9EDC-9470F950E7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{444C6992-904B-419F-9EDC-9470F950E7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{444C6992-904B-419F-9EDC-9470F950E7FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
