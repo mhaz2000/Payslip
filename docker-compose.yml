@@ -1,0 +1,42 @@
+version: "3.8"
+
+networks:
+  payslip-network:
+
+services:
+  payslip-client:
+    build:
+      context: ./payslip
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production  # Set the desired environment mode (e.g., production)
+      - API_URL=http://payslip.api
+    networks:
+      - payslip-network
+
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "M0h@mm@d"
+    ports:
+      - "1434:1433"
+    networks:
+      - payslip-network
+
+  payslip.api:
+    image: payslip-api:latest
+    build:
+      context: ./payslip-api/Payslip
+      dockerfile: Payslip.API/Dockerfile
+    ports:
+      - "4030:80"
+    depends_on:
+      - ms-sql-server
+    environment:
+      - CONFIG={"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}},"AllowedHosts":"*","ConnectionStrings":{"Main":"Data Source=ms-sql-server;Initial Catalog = PayslipDB;Persist Security Info=True;Integrated Security=False;User ID =sa; Password=M0h@mm@d;Connect Timeout=15000;MultipleActiveResultSets=true;TrustServerCertificate=True;"},"JwtIssuerOptions":{"Issuer":"FreeFallTicketing.ir","SecretKey":"U29vcmFuIEFyZ2hhbSBGYW5hdmFyIFBhcmRpcw==","Audience":"sbd-auth","ValidTimeInMinute":432000,"ExpireTimeTokenInMinute":36000,"MobilerRefreshTokenInMinute":60}}
+    
+    networks:
+      - payslip-network

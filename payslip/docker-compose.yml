@@ -1,0 +1,17 @@
+version: "3.8"
+
+networks:
+  payslip-network:
+
+services:
+  payslip-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production  # Set the desired environment mode (e.g., production)
+      - API_URL=http://payslip.api
+    networks:
+      - payslip-network

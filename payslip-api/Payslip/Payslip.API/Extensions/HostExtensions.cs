@@ -29,6 +29,8 @@ namespace Payslip.API.Extensions
 
                     _userStore = new UserStore<User, IdentityRole<Guid>, DataContext, Guid>(dataContext);
                     _userManager = new UserManager<User>(_userStore, null, new PasswordHasher<User>(), null, null, null, null, null, null);
+
+                    Console.WriteLine(dataContext.Database.GetConnectionString());
                     dataContext.Database.Migrate();
 
                     CreateRolesSeed(dataContext);
@@ -39,6 +41,8 @@ namespace Payslip.API.Extensions
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
+
                     logger.LogError("An error has been occured\n" + ex);
 
                     if (retryForAvailability < 50)
@@ -55,7 +59,9 @@ namespace Payslip.API.Extensions
 
         private static void UsersSeed(DataContext dataContext, UserManager<User> userManager, IExcelHelpler excelHelpler)
         {
-            FileStream file = new FileStream(Directory.GetCurrentDirectory() + "\\StaticFiles\\Users.xlsx", FileMode.Open);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles", "Users.xlsx");
+            FileStream file = new FileStream(filePath, FileMode.Open);
+
             var users = excelHelpler.ExtractUsers(file);
 
             string username = "admin";

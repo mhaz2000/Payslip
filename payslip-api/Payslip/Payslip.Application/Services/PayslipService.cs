@@ -30,6 +30,9 @@ namespace Payslip.Application.Services
             if (!payslipsCommand.Any())
                 throw new ManagedException("خطایی در خواندن مقادیر اکسل ارسالی رخ داده است.");
 
+            if (_unitOfWork.PayslipRepository.AsEnumerable().Any(c => c.Month.GetHashCode() == month && c.Year == year))
+                throw new ManagedException("فایل فیش حقوقی برای دوره مالی وارد شده، قبلا ثبت شده است.");
+
             foreach (var payslip in payslips)
             {
                 payslip.Month = parsedMonth;
@@ -58,7 +61,7 @@ namespace Payslip.Application.Services
 
         public UserPayslipDTO GetUserPayslip(Guid userId, int month, int year)
         {
-            var userPayslip = _unitOfWork.PayslipRepository.Include(c=> c.User)
+            var userPayslip = _unitOfWork.PayslipRepository.Include(c => c.User)
                 .FirstOrDefault(c => c.User?.Id == userId && c.Month.GetHashCode() == month && c.Year == year);
 
             return _mapper.Map<UserPayslipDTO>(userPayslip);
