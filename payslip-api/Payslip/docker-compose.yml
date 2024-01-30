@@ -18,7 +18,7 @@ services:
     image: payslip-api:latest
     build:
       context: .
-      dockerfile: Payslip.API/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "4030:80"
     depends_on:

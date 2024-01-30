@@ -7,11 +7,11 @@ services:
   payslip-client:
     build:
       context: ./payslip
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile  # Updated reference to the merged Dockerfile
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production  # Set the desired environment mode (e.g., production)
+      - NODE_ENV=production
       - API_URL=http://payslip.api
     networks:
       - payslip-network
@@ -27,16 +27,14 @@ services:
       - payslip-network
 
   payslip.api:
-    image: payslip-api:latest
     build:
       context: ./payslip-api/Payslip
-      dockerfile: Payslip.API/Dockerfile
+      dockerfile: Dockerfile  # Updated reference to the merged Dockerfile
     ports:
       - "4030:80"
     depends_on:
       - ms-sql-server
     environment:
       - CONFIG={"Logging":{"LogLevel":{"Default":"Information","Microsoft.AspNetCore":"Warning"}},"AllowedHosts":"*","ConnectionStrings":{"Main":"Data Source=ms-sql-server;Initial Catalog = PayslipDB;Persist Security Info=True;Integrated Security=False;User ID =sa; Password=M0h@mm@d;Connect Timeout=15000;MultipleActiveResultSets=true;TrustServerCertificate=True;"},"JwtIssuerOptions":{"Issuer":"FreeFallTicketing.ir","SecretKey":"U29vcmFuIEFyZ2hhbSBGYW5hdmFyIFBhcmRpcw==","Audience":"sbd-auth","ValidTimeInMinute":432000,"ExpireTimeTokenInMinute":36000,"MobilerRefreshTokenInMinute":60}}
-    
     networks:
       - payslip-network
