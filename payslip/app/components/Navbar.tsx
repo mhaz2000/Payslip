@@ -11,10 +11,10 @@ const Navbar = () => {
   return (
     <nav className="flex flex-row w-full justify-between px-10 py-5">
       <div className="flex flex-row gap-3 items-center">
-        <span className="border rounded-full p-1">
+        <span className="border rounded-full p-1 text-gray-300">
           <FaUser />
         </span>
-        <h2 className="">{session?.user.fullName}</h2>
+        <h2 className="text-gray-300">{session?.user.fullName}</h2>
       </div>
       <div className="flex flex-row gap-3">
         {session?.user.isAdmin && (
@@ -28,7 +28,9 @@ const Navbar = () => {
         )}
         <button
           className="btn-style"
-          onClick={() => signOut()}
+          onClick={() => {
+            signOut();
+          }}
         >
           خروج
         </button>

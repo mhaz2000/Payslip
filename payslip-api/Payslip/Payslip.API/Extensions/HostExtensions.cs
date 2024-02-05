@@ -14,7 +14,7 @@ namespace Payslip.API.Extensions
         private static IUserStore<User> _userStore;
         private static UserManager<User> _userManager;
 
-        public static IHost MigrateDatabase<TContext>(this IHost host, int? retry = 0)
+        public static async Task<IHost> MigrateDatabase<TContext>(this IHost host, int? retry = 0)
         {
             int retryForAvailability = retry.Value;
 
@@ -33,11 +33,13 @@ namespace Payslip.API.Extensions
                     Console.WriteLine(dataContext.Database.GetConnectionString());
                     dataContext.Database.Migrate();
 
-                    CreateRolesSeed(dataContext);
-                    CreateAdminSeed(dataContext, _userManager);
-                    UsersSeed(dataContext, _userManager, services.GetRequiredService<IExcelHelpler>());
+                    await CreateRolesSeed(dataContext);
+                    await CreateAdminSeed(dataContext, _userManager);
+                    await UsersSeed(dataContext, _userManager, services.GetRequiredService<IExcelHelpler>());
 
                     logger.LogInformation("Migrating database");
+
+                    dataContext.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -49,7 +51,7 @@ namespace Payslip.API.Extensions
                     {
                         retryForAvailability++;
                         Thread.Sleep(2000);
-                        MigrateDatabase<TContext>(host, retryForAvailability);
+                        await MigrateDatabase<TContext>(host, retryForAvailability);
                     }
                 }
             }
@@ -57,7 +59,7 @@ namespace Payslip.API.Extensions
             return host;
         }
 
-        private static void UsersSeed(DataContext dataContext, UserManager<User> userManager, IExcelHelpler excelHelpler)
+        private static async Task UsersSeed(DataContext dataContext, UserManager<User> userManager, IExcelHelpler excelHelpler)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles", "Users.xlsx");
             FileStream file = new FileStream(filePath, FileMode.Open);
@@ -77,13 +79,14 @@ namespace Payslip.API.Extensions
                         NormalizedUserName = user.NationalCode,
                     };
 
-                    userManager.CreateAsync(newUser, user.NationalCode);
+                    await userManager.CreateAsync(newUser, user.NationalCode);
                 }
-                dataContext.SaveChanges();
             }
+
+            await dataContext.SaveChangesAsync();
         }
 
-        private static void CreateAdminSeed(DataContext context, UserManager<User> userManager)
+        private static async Task CreateAdminSeed(DataContext context, UserManager<User> userManager)
         {
             string username = "admin";
 
@@ -94,20 +97,21 @@ namespace Payslip.API.Extensions
                     NormalizedUserName = "admin",
                 };
 
-                var done = userManager.CreateAsync(newUser, "123456");
+                var done = await userManager.CreateAsync(newUser, "123456");
 
-                if (done.Result.Succeeded)
-                    userManager.AddToRoleAsync(newUser, "Admin");
+                if (done.Succeeded)
+                    await userManager.AddToRoleAsync(newUser, "Admin");
 
-                context.SaveChanges();
             }
+
+            await context.SaveChangesAsync();
         }
 
-        private static void CreateRolesSeed(DataContext context)
+        private static async Task CreateRolesSeed(DataContext context)
         {
-            var role = context.Roles.AnyAsync(c => c.Name == "Admin");
+            var role = await context.Roles.AnyAsync(c => c.Name == "Admin");
 
-            if (!role.Result)
+            if (!role)
             {
                 var newAdminRole = new IdentityRole<Guid>()
                 {
@@ -116,7 +120,7 @@ namespace Payslip.API.Extensions
                     NormalizedName = "admin"
                 };
 
-                context.Roles.Add(newAdminRole);
+                await context.Roles.AddAsync(newAdminRole);
 
                 var newUserRole = new IdentityRole<Guid>()
                 {
@@ -124,10 +128,11 @@ namespace Payslip.API.Extensions
                     NormalizedName = "user",
                     Id = Guid.NewGuid(),
                 };
-                context.Roles.Add(newUserRole);
+                await context.Roles.AddAsync(newUserRole);
 
-                context.SaveChanges();
             }
+
+            context.SaveChanges();
         }
     }
 }

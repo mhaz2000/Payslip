@@ -15,12 +15,11 @@ services:
       - payslip-network
 
   payslip.api:
-    image: payslip-api:latest
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4030:80"
+      - "4030:4030"
     depends_on:
       - ms-sql-server
     environment:

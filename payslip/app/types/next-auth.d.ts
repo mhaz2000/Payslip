@@ -8,6 +8,7 @@ declare module "next-auth" {
       refreshToken: string;
       expiresIn: string;
       fullName: string;
+      mustChangePassword: boolean;
     };
   }
 }

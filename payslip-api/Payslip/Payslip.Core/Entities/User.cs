@@ -14,9 +14,10 @@ namespace Payslip.Core.Entities
             FirstName = firstName;
             NationalCode = nationalCode;
             CardNumber = cardNumber;
-            UserName= username;
-            IsActive= true;
+            UserName = username;
+            IsActive = true;
             Id = Guid.NewGuid();
+            MustChangePassword = true;
         }
 
         public string LastName { get; set; }
@@ -24,5 +25,6 @@ namespace Payslip.Core.Entities
         public string NationalCode { get; set; }
         public string CardNumber { get; set; }
         public bool IsActive { get; set; }
+        public bool MustChangePassword { get; set; }
     }
 }

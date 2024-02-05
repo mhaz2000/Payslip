@@ -66,7 +66,7 @@ const UploadUserExcel: React.FC<UploadUserExcelProps> = ({
                 style={{ backgroundColor: "#092635" }}
               >
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
+                  <h3 className="text-3xl font-semibold text-gray-300">
                     بارگذاری فایل اکسل اشخاص
                   </h3>
                   <button
@@ -86,14 +86,14 @@ const UploadUserExcel: React.FC<UploadUserExcelProps> = ({
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b gap-4">
                   <div className="mx-auto flex flex-row gap-4">
                     <button
-                      className="btn-style bg-transparent border-red-500 text-red-500 hover:bg-red-500 w-24"
+                      className="btn-style bg-transparent border-red-500 !text-red-500 hover:bg-red-500 w-24 hover:!text-black"
                       type="submit"
                       onClick={() => setShowModal(false)}
                     >
                       بستن
                     </button>
                     <button
-                      className="btn-style bg-transparent border-green-500 text-green-500 hover:bg-green-500 w-24"
+                      className="btn-style bg-transparent border-green-500 !text-green-500 hover:bg-green-500 w-24 hover:!text-black"
                       onClick={sendRequest}
                     >
                       ثبت

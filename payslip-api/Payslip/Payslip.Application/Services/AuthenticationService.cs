@@ -26,10 +26,11 @@ namespace Payslip.Application.Services
             if (user is null)
                 throw new ManagedException("کاربر مورد نظر یافت نشد.");
 
-            if(!(await _userManager.CheckPasswordAsync(user, command.OldPassword)))
+            if (!(await _userManager.CheckPasswordAsync(user, command.OldPassword)))
                 throw new ManagedException("رمز عبور قبلی اشتباه است.");
 
             user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, command.NewPassword);
+            user.MustChangePassword = false;
             await _unitOfWork.CommitAsync();
         }
 
@@ -56,13 +57,15 @@ namespace Payslip.Application.Services
             var userRoles = _unitOfWork.RoleRepository.GetUserRoles(user).ToList();
             var token = _tokenGenerator.TokenGeneration(user, jwtIssuerOptions, userRoles);
 
+            bool isAdmin = userRoles.Any(c => c.Name.ToLower() == "admin");
             return new UserLoginDTO()
             {
-                IsAdmin = userRoles.Any(c => c.Name.ToLower() == "admin"),
+                IsAdmin = isAdmin,
                 ExpiresIn = token.expires_in,
                 AuthToken = token.AuthToken,
                 RefreshToken = token.RefreshToken,
-                FullName = user.FirstName + " " + user.LastName
+                FullName = user.FirstName + " " + user.LastName,
+                MustChangePassword = user.MustChangePassword && !isAdmin
             };
         }
     }

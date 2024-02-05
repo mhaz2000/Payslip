@@ -106,7 +106,7 @@ const PayslipsList = ({
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="flex flex-row gap-2">
                   <button
-                    className="btn-style w-24 bg-black border-red-500 text-red-500 hover:bg-red-500"
+                    className="btn-style w-24 bg-black border-red-500 !text-red-500 hover:bg-red-500 hover:!text-black"
                     onClick={() => removePayslip(payslip.fileId)}
                   >
                     حذف
@@ -119,7 +119,7 @@ const PayslipsList = ({
                         payslip.month
                       )
                     }
-                    className={`btn-style w-24 bg-black border-blue-500 text-blue-500 hover:bg-blue-500`}
+                    className={`btn-style w-24 bg-black border-blue-500 !text-blue-500 hover:bg-blue-500 hover:!text-black`}
                   >
                     دانلود
                   </button>
