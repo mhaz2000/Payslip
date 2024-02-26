@@ -98,14 +98,14 @@ const UploadPayslipsForm: React.FC<UploadPayslipFormProps> = ({
         <div className="flex items-center justify-end py-6 px-2 border-t border-solid border-blueGray-200 rounded-b gap-4">
           <div className="mx-auto flex flex-row gap-4">
             <button
-              className="btn-style bg-transparent border-red-500 text-red-500 hover:bg-red-500 w-24"
+              className="btn-style bg-transparent border-red-500 !text-red-500 hover:bg-red-500 w-24 hover:!text-black"
               type="submit"
               onClick={() => closeModal()}
             >
               بستن
             </button>
             <button
-              className="btn-style bg-transparent border-green-500 text-green-500 hover:bg-green-500 w-24"
+              className="btn-style bg-transparent border-green-500 !text-green-500 hover:bg-green-500 w-24 hover:!text-black"
               onClick={handleSubmit}
             >
               ثبت

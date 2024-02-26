@@ -349,7 +349,9 @@ const UserPayslip = ({
           bodyClass="print-payslip"
           content={() => ref.current}
           trigger={() => (
-            <button className="btn-style mb-5">چاپ فیش حقوقی</button>
+            <button className="btn-style mb-5 text-gray-300">
+              چاپ فیش حقوقی
+            </button>
           )}
         />
       )}

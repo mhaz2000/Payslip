@@ -98,7 +98,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         >
           <div className="flex flex-col sm:flex-row gap-4 w-full">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-right">نام</label>
+              <label className="text-right text-gray-300">نام</label>
               <input
                 name="firstName"
                 type="text"
@@ -110,7 +110,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
               />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <label className="text-right">نام خانوادگی</label>
+              <label className="text-right text-gray-300">نام خانوادگی</label>
               <input
                 name="lastName"
                 type="text"
@@ -124,7 +124,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           </div>
           <div className="flex flex-col sm:flex-row gap-4 w-full">
             <div className="flex flex-col w-full gap-2">
-              <label className="text-right">کد ملی</label>
+              <label className="text-right text-gray-300">کد ملی</label>
               <input
                 name="nationalCode"
                 type="number"
@@ -138,7 +138,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
             <div className="flex flex-row w-full gap-2">
               <div className="flex flex-col w-full gap-2">
-                <label className="text-right">شماره کارت</label>
+                <label className="text-right text-gray-300">شماره کارت</label>
                 <input
                   name="cardNumber"
                   type="number"
@@ -154,14 +154,14 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b gap-4">
             <div className="mx-auto flex flex-row gap-4">
               <button
-                className="btn-style bg-transparent border-red-500 text-red-500 hover:bg-red-500 w-24"
+                className="btn-style bg-transparent border-red-500 !text-red-500 hover:bg-red-500 w-24 hover:!text-black"
                 type="submit"
                 onClick={() => closeModal()}
               >
                 بستن
               </button>
               <button
-                className="btn-style bg-transparent border-green-500 text-green-500 hover:bg-green-500 w-24"
+                className="btn-style bg-transparent border-green-500 !text-green-500 hover:bg-green-500 w-24 hover:!text-black"
                 type="submit"
               >
                 ثبت

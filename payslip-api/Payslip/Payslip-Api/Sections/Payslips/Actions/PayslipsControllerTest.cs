@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Payslip_Api.Sections.Payslips.Actions
@@ -83,7 +84,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
         #region get payslips
 
         [Fact]
-        public void Should_Get_All_Uploaded_Payslips()
+        public async Task Should_Get_All_Uploaded_Payslips()
         {
             //Arrange
             var expectedValues = new List<PayslipDTO>()
@@ -114,7 +115,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
             A.CallTo(() => _payslipService.GetPayslips(A<int>._)).Returns((expectedValues, 3));
 
             //Act
-            var response = _payslipsController.GetPayslips(5);
+            var response = await _payslipsController.GetPayslips(5);
             var result = (OkObjectResult)response;
             var responseModel = result.Value as ResponseModel;
 
@@ -191,9 +192,9 @@ namespace Payslip_Api.Sections.Payslips.Actions
         #region Get User Payslip
 
         [Fact]
-        public void Should_return_user_payslip()
+        public async Task Should_return_user_payslip()
         {
-            var response = _payslipsController.GetUserPayslip(1,1402);
+            var response = await _payslipsController.GetUserPayslip(1,1402);
             var result = (OkObjectResult)response;
 
             response.Should().NotBeNull();

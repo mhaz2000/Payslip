@@ -67,7 +67,7 @@ const ChangeUserPassword = ({ userId }: { userId: string }) => {
   return (
     <>
       <button
-        className="btn-style w-36 border-blue-500 text-blue-500 hover:bg-blue-500"
+        className="btn-style w-36 border-blue-500 !text-blue-500 hover:bg-blue-500 hover:!text-black"
         onClick={() => setShowModal(true)}
       >
         تغییر رمز عبور

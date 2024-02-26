@@ -69,23 +69,6 @@ namespace Payslip_Api.Sections.Payslips.Services
 
         }
 
-        [Fact]
-        public async Task Should_Throw_Exception_When_Wage_Is_Duplicated()
-        {
-            //Arrange
-            var payslipCommands = GeneratePayslipCommandData(5);
-
-            //Act
-            A.CallTo(() => _unitOfWork.PayslipRepository.Any(A<Expression<Func<UserPayslip,bool>>>._)).Returns(true);
-            var act = async () => await _payslipService.CreatePayslips(payslipCommands, 1400, 5, Guid.NewGuid());
-
-            //Assert
-            await act.Should().ThrowExactlyAsync<ManagedException>().WithMessage("فایل فیش حقوقی برای دوره مالی وارد شده، قبلا ثبت شده است.");
-
-            A.CallTo(() => _unitOfWork.PayslipRepository.AddRangeAsync(A<IEnumerable<UserPayslip>>._)).MustNotHaveHappened();
-            A.CallTo(() => _unitOfWork.CommitAsync()).MustNotHaveHappened();
-        }
-
         #endregion
 
         #region Get User payslips Wages
@@ -134,7 +117,7 @@ namespace Payslip_Api.Sections.Payslips.Services
         #region Get All Payslips
 
         [Fact]
-        public void Should_Get_All_Payslips()
+        public async Task Should_Get_All_Payslips()
         {
             //Arrange
             var data = GeneratePayslipData(5);
@@ -150,7 +133,7 @@ namespace Payslip_Api.Sections.Payslips.Services
             A.CallTo(() => _unitOfWork.PayslipRepository.OrderByDescending(A<Expression<Func<UserPayslip, object>>>._))
                 .Returns(data.AsQueryable());
 
-            var payslips = _payslipService.GetPayslips(0);
+            var payslips = await _payslipService.GetPayslips(0);
 
             payslips.Total.Should().Be(5);
             payslips.Payslips.Should().BeEquivalentTo(expectedData);

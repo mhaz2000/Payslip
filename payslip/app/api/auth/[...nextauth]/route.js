@@ -20,7 +20,8 @@ const handler = NextAuth({
 
         try
         {
-          const res = await fetch(`${process.env.API_URL}/api/authentication/login`, {
+          console.log(process.env.NEXT_PUBLIC_API_URL)
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authentication/login`, {
             method: "POST",
             body: JSON.stringify({
               username: credentials?.username,
@@ -54,6 +55,9 @@ const handler = NextAuth({
     {
       session.user = token;
       session.user.name = token['isAdmin'] ? 'admin' : '';
+      session.user.mustChangePassword = token['mustChangePassword'];
+      session.mustChangePassword = token['mustChangePassword'];
+
       return session;
     },
   },

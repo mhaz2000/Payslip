@@ -7,7 +7,7 @@ namespace Payslip.Application.Services
     {
         Task CreateUser(UserCreateCommand command);
         Task CreateUsers(IEnumerable<UserCreateCommand> users);
-        (IEnumerable<UserDTO> Users, int Total) GetUsers(int skip, string search);
+        Task<(IEnumerable<UserDTO> Users, int Total)> GetUsers(int skip, string search);
         Task RemoveUser(Guid userId);
         Task ToggleActivation(Guid userId);
     }

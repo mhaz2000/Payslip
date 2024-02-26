@@ -44,7 +44,7 @@ namespace Payslip.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public (IEnumerable<PayslipDTO> Payslips, int Total) GetPayslips(int skip)
+        public Task<(IEnumerable<PayslipDTO> Payslips, int Total)> GetPayslips(int skip)
         {
             var payslips = _unitOfWork.PayslipRepository.OrderByDescending(c => c.Year);
 
@@ -56,15 +56,15 @@ namespace Payslip.Application.Services
                 UploadedDate = s.FirstOrDefault()!.CreatedAt
             }).ToList().OrderByDescending(c => c.Year).ThenByDescending(c => c.Month);
 
-            return (payslipsDTO.Skip(skip), payslipsDTO.Count());
+            return Task.FromResult((payslipsDTO.Skip(skip), payslipsDTO.Count()));
         }
 
-        public UserPayslipDTO GetUserPayslip(Guid userId, int month, int year)
+        public Task<UserPayslipDTO> GetUserPayslip(Guid userId, int month, int year)
         {
             var userPayslip = _unitOfWork.PayslipRepository.Include(c => c.User)
                 .FirstOrDefault(c => c.User?.Id == userId && c.Month.GetHashCode() == month && c.Year == year);
 
-            return _mapper.Map<UserPayslipDTO>(userPayslip);
+            return Task.FromResult(_mapper.Map<UserPayslipDTO>(userPayslip));
         }
 
         public async Task<IEnumerable<UserPayslipWagesDTO>> GetUserWages(Guid userId)

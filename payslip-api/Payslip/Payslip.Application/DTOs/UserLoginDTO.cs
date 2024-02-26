@@ -7,5 +7,6 @@
         public string AuthToken { get; internal set; }
         public string RefreshToken { get; internal set; }
         public string FullName { get; internal set; }
+        public bool MustChangePassword { get; set; }
     }
 }

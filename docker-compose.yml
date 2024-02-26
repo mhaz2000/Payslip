@@ -13,8 +13,11 @@ services:
     environment:
       - NODE_ENV=production
       - API_URL=http://payslip.api
+      - NEXT_PUBLIC_API_URL=http://localhost:5030
     networks:
       - payslip-network
+    # volumes:
+    #   - ./config.js:/app/config.js
 
   ms-sql-server:
     image: mcr.microsoft.com/mssql/server:2022-latest

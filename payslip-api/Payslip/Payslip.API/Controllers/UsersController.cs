@@ -32,9 +32,9 @@ namespace Payslip.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers(int? skip = 0, string? search = "")
+        public async Task<IActionResult> GetUsers(int? skip = 0, string? search = "")
         {
-            var data = _userService.GetUsers(skip ?? 0, search ?? string.Empty);
+            var data = await _userService.GetUsers(skip ?? 0, search ?? string.Empty);
 
             return Ok(new ResponseModel(data.Total, data.Users));
         }

@@ -20,7 +20,7 @@ const UploadNewPayslip: React.FC<UploadNewPayslipProps> = ({
   return (
     <>
       <button
-        className="btn-style w-52 ml-2"
+        className="btn-style w-52 ml-2 text-gray-300"
         onClick={() => setShowModal(true)}
       >
         بارگذاری فیش حقوقی
@@ -37,7 +37,9 @@ const UploadNewPayslip: React.FC<UploadNewPayslipProps> = ({
                 style={{ backgroundColor: "#092635" }}
               >
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">بارگذاری فیش حقوقی</h3>
+                  <h3 className="text-3xl font-semibold text-gray-300">
+                    بارگذاری فیش حقوقی
+                  </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -48,7 +50,10 @@ const UploadNewPayslip: React.FC<UploadNewPayslipProps> = ({
                   </button>
                 </div>
                 {/*body*/}
-                <UploadPayslipsForm closeModal={closeModal} handleAction={handleCreatePayslip} />
+                <UploadPayslipsForm
+                  closeModal={closeModal}
+                  handleAction={handleCreatePayslip}
+                />
                 {/*footer*/}
               </div>
             </div>

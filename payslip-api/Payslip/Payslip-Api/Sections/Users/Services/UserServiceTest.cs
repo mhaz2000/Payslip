@@ -39,13 +39,13 @@ namespace Payslip_Api.Sections.Users.Services
 
         [Theory]
         [InlineData(5)]
-        public void Should_Get_Users(int skip)
+        public async Task Should_Get_Users(int skip)
         {
             //Arrange 
             var dbUsers = GenerateUsers(20).AsQueryable();
             A.CallTo(() => _unitOfWork.UserRepository.Where(A<Expression<Func<User, bool>>>._)).Returns(dbUsers.AsQueryable());
 
-            var data = _userService.GetUsers(skip, string.Empty);
+            var data = await _userService.GetUsers(skip, string.Empty);
             A.CallTo(() => _unitOfWork.UserRepository.Where(A<Expression<Func<User, bool>>>._)).MustHaveHappened();
             A.CallTo(() => _mapper.Map<IEnumerable<UserDTO>>(A<IEnumerable<User>>._)).MustHaveHappenedOnceExactly();
 

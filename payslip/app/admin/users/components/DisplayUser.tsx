@@ -107,7 +107,7 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
                 <span className="flex flex-row gap-2">
                   <ChangeUserPassword userId={user.id} />
                   <button
-                    className="btn-style w-24 bg-black border-red-500 text-red-500 hover:bg-red-500"
+                    className="btn-style w-24 bg-black border-red-500 !text-red-500 hover:bg-red-500 hover:!text-black"
                     onClick={() => removeUser(user.id)}
                   >
                     حذف
@@ -116,8 +116,8 @@ const DisplayUser: React.FC<DisplayUserComponentProps> = ({
                     onClick={() => toggleActivation(user.id)}
                     className={`btn-style w-24 bg-black ${
                       user.isActive
-                        ? "border-yellow-500 text-yellow-500 hover:bg-yellow-500"
-                        : "border-green-500 text-green-500 hover:bg-green-500"
+                        ? "border-yellow-500 !text-yellow-500 hover:bg-yellow-500 hover:!text-black"
+                        : "border-green-500 !text-green-500 hover:bg-green-500 hover:!text-black"
                     } `}
                   >
                     {user.isActive ? "غیر فعال" : "فعال"}

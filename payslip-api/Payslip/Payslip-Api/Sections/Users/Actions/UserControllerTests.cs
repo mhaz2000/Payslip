@@ -32,14 +32,14 @@ namespace Payslip_Api.Sections.Users.Actions
         #region Get Users
         [Theory]
         [InlineData(10)]
-        public void Get_User_Should_Return_Ok_Result(int skip)
+        public async Task Get_User_Should_Return_Ok_Result(int skip)
         {
             //Arrange
             var generatedUsers = GenerateUsers(5);
             A.CallTo(() => _userService.GetUsers(A<int>._, A<string>._)).Returns((generatedUsers, 5));
 
             //Act
-            var response = _userController.GetUsers(skip);
+            var response = await _userController.GetUsers(skip);
             var result = (OkObjectResult)response;
             var data = result.Value as ResponseModel;
             var users = data!.Data as IEnumerable<UserDTO>;
@@ -52,14 +52,14 @@ namespace Payslip_Api.Sections.Users.Actions
 
         [Theory]
         [InlineData(null)]
-        public void Get_User_Should_Return_Ok_Result_Even_When_Query_String_Is_Null(int? skip)
+        public async Task Get_User_Should_Return_Ok_Result_Even_When_Query_String_Is_Null(int? skip)
         {
             //Arrange
             var generatedUsers = GenerateUsers(5);
             A.CallTo(() => _userService.GetUsers(A<int>._, A<string>._)).Returns((generatedUsers, 5));
 
             //Act
-            var response = _userController.GetUsers(skip);
+            var response = await _userController.GetUsers(skip);
             var result = (OkObjectResult)response;
             var data = result.Value as ResponseModel;
             var users = data!.Data as IEnumerable<UserDTO>;

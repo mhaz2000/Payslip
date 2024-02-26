@@ -17,7 +17,7 @@
 }
 
 .btn-style {
-  @apply border-2 rounded-xl py-1 px-5  hover:bg-gray-300 hover:text-slate-900 ease-in duration-300 cursor-pointer;
+  @apply border-2 rounded-xl py-1 px-5  hover:bg-gray-300 hover:text-slate-900 ease-in duration-300 cursor-pointer text-gray-300;
 }
 
 .gradient-bg {

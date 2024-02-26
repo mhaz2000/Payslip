@@ -37,7 +37,9 @@ const CreateUser: React.FC<CreateUserProps> = ({ handleCreateUser }) => {
                 style={{ backgroundColor: "#092635" }}
               >
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">ایجاد کاربر جدید</h3>
+                  <h3 className="text-3xl font-semibold text-gray-300">
+                    ایجاد کاربر جدید
+                  </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -48,7 +50,10 @@ const CreateUser: React.FC<CreateUserProps> = ({ handleCreateUser }) => {
                   </button>
                 </div>
                 {/*body*/}
-                <CreateUserForm handleCreateUser={handleCreateUser} closeModal={closeModal} />
+                <CreateUserForm
+                  handleCreateUser={handleCreateUser}
+                  closeModal={closeModal}
+                />
                 {/*footer*/}
               </div>
             </div>

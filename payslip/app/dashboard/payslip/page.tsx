@@ -50,7 +50,7 @@ const Payslip = () => {
   return (
     <div className="">
       <div className="flex flex-col w-full items-center">
-        <h1 className="dir-right text-base lg:text-3xl md:text-xl mb-6 mt-14 mx-auto text-center">
+        <h1 className="dir-right text-base lg:text-3xl md:text-xl mb-6 mt-14 mx-auto text-center text-gray-300">
           برای مشاهده فیش حقوقی خود سال و ماه صدور را وارد نمایید.
         </h1>
         <div className="flex flex-col md:flex-row gap-4 justify-center">
