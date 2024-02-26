@@ -6,7 +6,7 @@ const ChangePassword = () => {
       <h1 className="text-5xl text-center mt-10 mb-28">
         لطفا رمز عبور خود را تغییر دهید.
       </h1>
-      <Profile />
+      <Profile shouldSignOut={true} />
     </div>
   );
 };

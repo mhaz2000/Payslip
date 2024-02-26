@@ -1,9 +1,7 @@
-"use client";
-
 import Profile from "@/app/components/Profile";
 
 const UserProfile = () => {
-  <Profile />;
+  return <Profile shouldSignOut={false} />;
 };
 
 export default UserProfile;

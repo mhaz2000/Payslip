@@ -6,8 +6,13 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { FormEvent, useState } from "react";
 import { displayError, displaySuccess } from "@/lib/toastDisplay";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
-const Profile = () => {
+interface ProfileProps {
+  shouldSignOut: boolean;
+}
+
+const Profile = ({ shouldSignOut }: ProfileProps) => {
   const axiosAuth = useAxiosAuth();
 
   const [prevPassEmpty, setPrevPassEmpty] = useState(false);
@@ -27,7 +32,8 @@ const Profile = () => {
 
       displaySuccess("رمز عبور با موفقیت تغییر یافت.");
 
-      router.push("/dashboard");
+      if (!shouldSignOut) router.push("/dashboard/payslip");
+      else signOut();
     } catch (error: any) {
       displayError(error.data.message);
     }

@@ -64,13 +64,13 @@ namespace Payslip.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public (IEnumerable<UserDTO> Users, int Total) GetUsers(int skip, string search)
+        public Task<(IEnumerable<UserDTO> Users, int Total)> GetUsers(int skip, string search)
         {
             var users = _unitOfWork.UserRepository.Where(c => !string.IsNullOrEmpty(c.NationalCode))
                 .Where(c => (c.FirstName + c.LastName + c.NationalCode + c.CardNumber).Contains(search) || (c.FirstName + " " + c.LastName).Contains(search))
                 .OrderBy(c => c.CardNumber).ToList();
 
-            return (_mapper.Map<IEnumerable<UserDTO>>(users.Skip(skip).Take(10)), users.AsEnumerable().Count());
+            return Task.FromResult((_mapper.Map<IEnumerable<UserDTO>>(users.Skip(skip).Take(10)), users.AsEnumerable().Count()));
         }
 
         public async Task RemoveUser(Guid userId)

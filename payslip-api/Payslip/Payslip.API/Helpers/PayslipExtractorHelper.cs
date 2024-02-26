@@ -41,7 +41,7 @@ namespace Payslip.API.Helpers
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 worksheet.TrimLastEmptyRows();
-                var rowCount = worksheet.Dimension.Rows;
+                var rowCount = worksheet.Dimension.Rows+1;
 
                 int? counter = FindNextRow(worksheet, 1, rowCount);
                 while (counter is not null)

@@ -32,18 +32,18 @@ namespace Payslip.API.Controllers
         }
 
         [HttpGet("UserPayslip")]
-        public IActionResult GetUserPayslip(int month, int year)
+        public async Task<IActionResult> GetUserPayslip(int month, int year)
         {
-            var userPayslip = _payslipService.GetUserPayslip(UserId, month, year);
+            var userPayslip = await _payslipService.GetUserPayslip(UserId, month, year);
 
             return Ok(userPayslip);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult GetPayslips(int? skip = 0)
+        public async Task<IActionResult> GetPayslips(int? skip = 0)
         {
-            var data = _payslipService.GetPayslips(skip ?? 0);
+            var data = await _payslipService.GetPayslips(skip ?? 0);
 
             return Ok(new ResponseModel(data.Total, data.Payslips));
         }
