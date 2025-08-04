@@ -10,5 +10,7 @@ namespace Payslip.Application.DTOs
     public class UploadPayslipCommand
     {
         public IFormFile File { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
     }
 }

@@ -112,7 +112,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
                 }
             };
 
-            A.CallTo(() => _payslipService.GetPayslips(A<int>._)).Returns((expectedValues, 3));
+            A.CallTo(() => _payslipService.GetPayslips(A<int>._, A<string>._)).Returns((expectedValues, 3));
 
             //Act
             var response = await _payslipsController.GetPayslips(5);
@@ -173,10 +173,12 @@ namespace Payslip_Api.Sections.Payslips.Actions
             var fakeDTO = new UploadPayslipCommand()
             {
                 File = A.Fake<IFormFile>(),
+                Month = 8,
+                Year = 1402
             };
 
             //Act
-            var response = await _payslipsController.UploadPayslipFile(fakeDTO, 1402, 8);
+            var response = await _payslipsController.UploadPayslipFile(fakeDTO);
             var result = (OkResult)response;
 
             //Assert
@@ -194,7 +196,7 @@ namespace Payslip_Api.Sections.Payslips.Actions
         [Fact]
         public async Task Should_return_user_payslip()
         {
-            var response = await _payslipsController.GetUserPayslip(1,1402);
+            var response = await _payslipsController.GetUserPayslip(1, 1402);
             var result = (OkObjectResult)response;
 
             response.Should().NotBeNull();

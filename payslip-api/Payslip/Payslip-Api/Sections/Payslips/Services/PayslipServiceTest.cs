@@ -133,7 +133,7 @@ namespace Payslip_Api.Sections.Payslips.Services
             A.CallTo(() => _unitOfWork.PayslipRepository.OrderByDescending(A<Expression<Func<UserPayslip, object>>>._))
                 .Returns(data.AsQueryable());
 
-            var payslips = await _payslipService.GetPayslips(0);
+            var payslips = await _payslipService.GetPayslips(0, string.Empty);
 
             payslips.Total.Should().Be(5);
             payslips.Payslips.Should().BeEquivalentTo(expectedData);

@@ -2,7 +2,8 @@
   "profiles": {
     "Payslip.API": {
       "commandName": "Project",
-      "launchUrl": "weatherforecast",
+      "launchUrl": "",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

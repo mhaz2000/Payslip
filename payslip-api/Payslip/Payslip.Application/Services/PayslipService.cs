@@ -44,7 +44,7 @@ namespace Payslip.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public Task<(IEnumerable<PayslipDTO> Payslips, int Total)> GetPayslips(int skip)
+        public Task<(IEnumerable<PayslipDTO> Payslips, int Total)> GetPayslips(int skip, string search)
         {
             var payslips = _unitOfWork.PayslipRepository.OrderByDescending(c => c.Year);
 
@@ -54,9 +54,11 @@ namespace Payslip.Application.Services
                 Month = s.Key.Month.GetDescription(),
                 Year = s.Key.Year,
                 UploadedDate = s.FirstOrDefault()!.CreatedAt
-            }).ToList().OrderByDescending(c => c.Year).ThenByDescending(c => c.Month);
+            }).ToList()
+            .Where(c => (c.Year.ToString() + c.Month).Contains(search) || ((c.Year.ToString() + " " + c.Month).Contains(search)))
+            .OrderByDescending(c => c.UploadedDate);
 
-            return Task.FromResult((payslipsDTO.Skip(skip), payslipsDTO.Count()));
+            return Task.FromResult((payslipsDTO.Skip(skip).Take(7), payslipsDTO.Count()));
         }
 
         public Task<UserPayslipDTO> GetUserPayslip(Guid userId, int month, int year)
@@ -78,7 +80,7 @@ namespace Payslip.Application.Services
             return payslips.GroupBy(c => c.Year).Select(item => new UserPayslipWagesDTO()
             {
                 Year = item.Key,
-                Months = item.Select(c => c.Month.GetHashCode())
+                Months = item.Select(c => c.Month.GetHashCode()).OrderBy(c=>c)
             });
         }
 

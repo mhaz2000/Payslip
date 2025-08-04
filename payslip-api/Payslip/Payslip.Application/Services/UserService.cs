@@ -70,7 +70,7 @@ namespace Payslip.Application.Services
                 .Where(c => (c.FirstName + c.LastName + c.NationalCode + c.CardNumber).Contains(search) || (c.FirstName + " " + c.LastName).Contains(search))
                 .OrderBy(c => c.CardNumber).ToList();
 
-            return Task.FromResult((_mapper.Map<IEnumerable<UserDTO>>(users.Skip(skip).Take(10)), users.AsEnumerable().Count()));
+            return Task.FromResult((_mapper.Map<IEnumerable<UserDTO>>(users.Skip(skip).Take(7)), users.AsEnumerable().Count()));
         }
 
         public async Task RemoveUser(Guid userId)
@@ -92,6 +92,22 @@ namespace Payslip.Application.Services
 
             user.IsActive = !user.IsActive;
 
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task UpdateUser(UserUpdateCommand command, Guid userId)
+        {
+            var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(c => c.Id == userId);
+            if (user is null)
+                throw new ManagedException("کاربر مورد نظر یافت نشد.");
+
+            user.FirstName = command.FirstName;
+            user.LastName = command.LastName;
+            user.NationalCode = command.NationalCode;
+            user.CardNumber = command.CardNumber;
+
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, command.Password);
+            user.MustChangePassword = false;
             await _unitOfWork.CommitAsync();
         }
     }

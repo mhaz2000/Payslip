@@ -11,7 +11,7 @@ namespace Payslip.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class FilesController : ApiControllerBase
-    {
+    {   
         private readonly IFileService _fileService;
         public FilesController(IFileService fileService)
         {

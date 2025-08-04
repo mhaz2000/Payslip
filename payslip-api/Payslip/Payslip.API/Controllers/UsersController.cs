@@ -22,11 +22,22 @@ namespace Payslip.API.Controllers
             _userExctractor = excelHelpler;
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateUser(UserCreateCommand command)
         {
             command.Validate();
 
             await _userService.CreateUser(command);
+
+            return Ok();
+        }
+
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateCommand command, [FromRoute] Guid userId)
+        {
+            command.Validate();
+
+            await _userService.UpdateUser(command, userId);
 
             return Ok();
         }
@@ -56,7 +67,7 @@ namespace Payslip.API.Controllers
         }
 
         [HttpPost("UploadUsersFile")]
-        public async Task<IActionResult> ImportUsers([FromQuery] ImportUserExcelCommmand dto)
+        public async Task<IActionResult> ImportUsers([FromForm] ImportUserExcelCommmand dto)
         {
             IEnumerable<UserModel> users;
             using (var stream = new MemoryStream())

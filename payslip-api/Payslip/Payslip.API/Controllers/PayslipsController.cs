@@ -41,9 +41,9 @@ namespace Payslip.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetPayslips(int? skip = 0)
+        public async Task<IActionResult> GetPayslips(int? skip = 0, string search = "")
         {
-            var data = await _payslipService.GetPayslips(skip ?? 0);
+            var data = await _payslipService.GetPayslips(skip ?? 0, search);
 
             return Ok(new ResponseModel(data.Total, data.Payslips));
         }
@@ -58,7 +58,7 @@ namespace Payslip.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> UploadPayslipFile([FromQuery] UploadPayslipCommand dto, int year, int month)
+        public async Task<IActionResult> UploadPayslipFile([FromForm] UploadPayslipCommand dto)
         {
             IEnumerable<PayslipCommand> payslips;
             Guid fileId;
@@ -76,7 +76,7 @@ namespace Payslip.API.Controllers
                 fileId = await _fileService.StoreFile(stream, dto.File.Name);
             }
 
-            await _payslipService.CreatePayslips(payslips, year, month, fileId);
+            await _payslipService.CreatePayslips(payslips, dto.Year, dto.Month, fileId);
 
             return Ok();
         }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Payslip.API;
@@ -130,11 +131,38 @@ app.UseCors(c =>
     c.AllowAnyHeader();
     c.AllowAnyMethod();
     c.AllowAnyOrigin();
+
 });
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseStaticFiles(); // Important: serve wwwroot and others
+
+// Serve React app from /ClientApp
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "ClientSide")),
+    RequestPath = ""
+});
+
+// Fallback to index.html for client-side routing
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 404 &&
+        !Path.HasExtension(context.Request.Path.Value) &&
+        !context.Request.Path.Value.StartsWith("/api"))
+    {
+        context.Response.StatusCode = 200;
+        context.Response.ContentType = "text/html";
+        await context.Response.SendFileAsync(Path.Combine(app.Environment.ContentRootPath, "ClientSide", "index.html"));
+    }
+});
 
 app.MapControllers();
 

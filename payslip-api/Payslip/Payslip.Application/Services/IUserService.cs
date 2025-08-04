@@ -10,5 +10,6 @@ namespace Payslip.Application.Services
         Task<(IEnumerable<UserDTO> Users, int Total)> GetUsers(int skip, string search);
         Task RemoveUser(Guid userId);
         Task ToggleActivation(Guid userId);
+        Task UpdateUser(UserUpdateCommand command, Guid userId);
     }
 }
