@@ -1,0 +1,5 @@
+.rtl .react-datepicker__close-icon {
+  left: 10px !important;
+  right: auto;
+}
+
